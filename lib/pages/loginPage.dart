@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_econnect/models/api.dart';
+import 'package:my_econnect/models/route.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -10,10 +11,16 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  String username = "";
+  String password = "";
+
   Container _email() {
     return Container(
       margin: EdgeInsets.only(bottom: 10),
       child: TextField(
+        onChanged: (value) {
+          username = value;
+        },
         decoration: InputDecoration(
           hintText: 'Veuillez saisir votre identifiant',
           labelText: "Adresse email",
@@ -46,6 +53,9 @@ class _LoginPageState extends State<LoginPage> {
         obscureText: true,
         enableSuggestions: false,
         autocorrect: false,
+        onChanged: (value) {
+          password = value;
+        },
         decoration: InputDecoration(
           hintText: 'Saisissez votre mot de passe !',
           labelText: "Mot de passe",
@@ -63,29 +73,37 @@ class _LoginPageState extends State<LoginPage> {
       margin: EdgeInsets.only(top: 15),
       child: ElevatedButton(
         style: ButtonStyle(
-          padding:
-              MaterialStateProperty.all(EdgeInsets.fromLTRB(40, 20, 40, 20)),
-        ),
+            padding:
+                MaterialStateProperty.all(EdgeInsets.fromLTRB(40, 20, 40, 20)),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(100),
+            ))),
         child: Text("Se connecter"),
         onPressed: () => {
-          login("mollet.simon.pro@gmail.com", "yes"),
+          login(username, password),
         },
       ),
     );
   }
 
   login(username, password) {
-    Api().login(username, password);
+    Api().login(username, password).then((value) => {
+          if (value.statusCode == 401)
+            {
+              print(value.body),
+            }
+          else
+            {}
+        });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(left: 30, right: 30),
-      child: SizedBox.expand(
+    return Scaffold(
+      body: Container(
+        margin: EdgeInsets.only(left: 30, right: 30, top: 150),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             _title(),
             _email(),

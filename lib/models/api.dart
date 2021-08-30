@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Api {
@@ -16,16 +17,11 @@ class Api {
     return "salut";
   }
 
-  Future<String> login(String username, String password) async {
-    var response = await http
-        .post(Uri.parse(baseURL + '/user/login'),
-            headers: header,
-            body: jsonEncode(
-                <String, String>{"mail": username, "password": password}))
-        .then((value) => {
-              _prefs.then((prefs) =>
-                  prefs.setString("token", jsonDecode(value.body)["token"]))
-            });
-    return "Connecté !";
+  Future<Response> login(String username, String password) async {
+    var response = await http.post(Uri.parse(baseURL + '/user/login'),
+        headers: header,
+        body: jsonEncode(
+            <String, String>{"mail": username, "password": password}));
+    return response;
   }
 }
