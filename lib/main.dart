@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_econnect/pages/homePage.dart';
+import 'package:my_econnect/pages/loginPage.dart';
 
 void main() {
   runApp(MyApp());
@@ -59,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
         centerTitle: false,
       ),
       body:
-          HomePage(), // This trailing comma makes auto-formatting nicer for build methods.
+          LoginPage(), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

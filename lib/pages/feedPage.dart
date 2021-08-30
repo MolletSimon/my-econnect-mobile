@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_econnect/models/api.dart';
 
 class FeedPage extends StatefulWidget {
   FeedPage({Key? key}) : super(key: key);
@@ -8,6 +9,13 @@ class FeedPage extends StatefulWidget {
 }
 
 class _FeedPageState extends State<FeedPage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Api().getPosts();
+  }
+
   Container _inputPost() {
     return Container(
       margin: EdgeInsets.fromLTRB(20, 20, 20, 20),
