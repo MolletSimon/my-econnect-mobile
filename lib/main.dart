@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_econnect/pages/homePage.dart';
 
 void main() {
   runApp(MyApp());
@@ -34,15 +35,13 @@ class MyApp extends StatelessWidget {
               fontFamily: 'Poppins',
             ),
           )),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
+  MyHomePage({Key? key}) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -59,19 +58,8 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Colors.white,
         centerTitle: false,
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text('wesh'),
-          ],
-        ),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      body:
+          HomePage(), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
