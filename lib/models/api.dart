@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Api {
-  final String baseURL = "http://localhost:3000";
+  final String baseURL = "https://api-my-connect.herokuapp.com";
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   dynamic header = {
@@ -24,7 +24,7 @@ class Api {
                 <String, String>{"mail": username, "password": password}))
         .then((value) => {
               _prefs.then((prefs) =>
-                  prefs.setString("token", jsonDecode(value.body).token))
+                  prefs.setString("token", jsonDecode(value.body)["token"]))
             });
     return "Connecté !";
   }

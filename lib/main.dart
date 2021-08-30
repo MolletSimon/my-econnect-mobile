@@ -1,14 +1,19 @@
+import 'dart:async';
+import 'package:my_econnect/models/route.dart' as RouterApp;
 import 'package:flutter/material.dart';
 import 'package:my_econnect/pages/homePage.dart';
 import 'package:my_econnect/pages/loginPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-String token = "";
+String? token;
 
-Future<void> main() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  token = prefs.getString("token")!;
-  runApp(MyApp());
+void main() async {
+  await runZonedGuarded(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    final prefs = await SharedPreferences.getInstance();
+    token = prefs.getString("token");
+    runApp(MyApp(prefs));
+  }, (error, st) => print(error));
 }
 
 Map<int, Color> color = {
@@ -25,7 +30,9 @@ Map<int, Color> color = {
 };
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+  MyApp(this.prefs);
+  final SharedPreferences prefs;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -41,31 +48,57 @@ class MyApp extends StatelessWidget {
               fontFamily: 'Poppins',
             ),
           )),
-      home: MyHomePage(),
+      home: MyHomePage(prefs: prefs),
+      initialRoute: token == null || token!.isEmpty
+          ? RouterApp.RoutePaths.Login
+          : RouterApp.RoutePaths.Home,
+      onGenerateRoute: RouterApp.Router.generateRoute,
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key}) : super(key: key);
+  MyHomePage({Key? key, required this.prefs}) : super(key: key);
+
+  final SharedPreferences prefs;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  logout() async {
+    var prefs = widget.prefs;
+    prefs.setString("token", "");
+    Navigator.of(context).pushNamed(RouterApp.RoutePaths.Login);
+  }
+
+  Container _disconnect() {
+    return Container(
+      child: TextButton(
+        style: ButtonStyle(
+          side: MaterialStateProperty.all(
+              BorderSide(width: 0, color: Colors.white)),
+          backgroundColor: MaterialStateProperty.all(Colors.white),
+        ),
+        child: new Icon(
+          Icons.logout,
+          color: Theme.of(context).primaryColor,
+        ),
+        onPressed: () => logout(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
         title: Text("My Connect"),
         backgroundColor: Colors.white,
+        actions: [_disconnect()],
         centerTitle: false,
       ),
-      body:
-          LoginPage(), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

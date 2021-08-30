@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:my_econnect/models/api.dart';
 
 class LoginPage extends StatefulWidget {
@@ -11,8 +10,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  var parser = EmojiParser();
-  var finger = Emoji('finger', '✌🏻');
   Container _email() {
     return Container(
       margin: EdgeInsets.only(bottom: 10),
