@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:my_econnect/pages/homePage.dart';
 import 'package:my_econnect/pages/loginPage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+String token = "";
+
+Future<void> main() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  token = prefs.getString("token")!;
   runApp(MyApp());
 }
 
