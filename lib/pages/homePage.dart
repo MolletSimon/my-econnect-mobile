@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:my_econnect/models/route.dart';
 import 'package:my_econnect/pages/feedPage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -10,6 +12,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   final List<Widget> _children = [
     FeedPage(),
@@ -27,9 +30,38 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  logout() async {
+    SharedPreferences prefs = await _prefs;
+    prefs.setString("token", "");
+    Navigator.of(context).pushNamed(RoutePaths.Login);
+  }
+
+  Container _disconnect() {
+    return Container(
+      child: TextButton(
+        style: ButtonStyle(
+          side: MaterialStateProperty.all(
+              BorderSide(width: 0, color: Colors.white)),
+          backgroundColor: MaterialStateProperty.all(Colors.white),
+        ),
+        child: new Icon(
+          Icons.logout,
+          color: Theme.of(context).primaryColor,
+        ),
+        onPressed: () => logout(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("My Connect"),
+        backgroundColor: Colors.white,
+        actions: [_disconnect()],
+        centerTitle: false,
+      ),
       body: _children[_currentIndex],
       bottomNavigationBar: Container(
           decoration: BoxDecoration(

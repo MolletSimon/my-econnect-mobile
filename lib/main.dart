@@ -48,57 +48,11 @@ class MyApp extends StatelessWidget {
               fontFamily: 'Poppins',
             ),
           )),
-      home: MyHomePage(prefs: prefs),
+      home: HomePage(),
       initialRoute: token == null || token!.isEmpty
           ? RouterApp.RoutePaths.Login
           : RouterApp.RoutePaths.Home,
       onGenerateRoute: RouterApp.Router.generateRoute,
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.prefs}) : super(key: key);
-
-  final SharedPreferences prefs;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  logout() async {
-    var prefs = widget.prefs;
-    prefs.setString("token", "");
-    Navigator.of(context).pushNamed(RouterApp.RoutePaths.Login);
-  }
-
-  Container _disconnect() {
-    return Container(
-      child: TextButton(
-        style: ButtonStyle(
-          side: MaterialStateProperty.all(
-              BorderSide(width: 0, color: Colors.white)),
-          backgroundColor: MaterialStateProperty.all(Colors.white),
-        ),
-        child: new Icon(
-          Icons.logout,
-          color: Theme.of(context).primaryColor,
-        ),
-        onPressed: () => logout(),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("My Connect"),
-        backgroundColor: Colors.white,
-        actions: [_disconnect()],
-        centerTitle: false,
-      ),
     );
   }
 }

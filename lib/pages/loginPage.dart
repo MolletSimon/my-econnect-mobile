@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_econnect/models/api.dart';
@@ -13,6 +15,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   String username = "";
   String password = "";
+  bool loading = false;
+  dynamic snackBar = SnackBar(content: Text(''));
 
   Container _email() {
     return Container(
@@ -87,31 +91,54 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  Container _loading() {
+    return Container(
+      child: CircularProgressIndicator(),
+      alignment: Alignment.center,
+    );
+  }
+
   login(username, password) {
+    setState(() {
+      loading = true;
+    });
     Api().login(username, password).then((value) => {
           if (value.statusCode == 401)
             {
-              print(value.body),
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(jsonDecode(value.body)["message"]),
+                backgroundColor: Colors.red[800],
+              )),
+              setState(() {
+                loading = false;
+              }),
             }
           else
-            {}
+            {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text('Connecté !'),
+              )),
+              Navigator.of(context).pushNamed(RoutePaths.Home)
+            }
         });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        margin: EdgeInsets.only(left: 30, right: 30, top: 150),
-        child: Column(
-          children: [
-            _title(),
-            _email(),
-            _password(),
-            _loginButton(),
-          ],
-        ),
-      ),
+      body: loading
+          ? (_loading())
+          : Container(
+              margin: EdgeInsets.only(left: 30, right: 30, top: 150),
+              child: Column(
+                children: [
+                  _title(),
+                  _email(),
+                  _password(),
+                  _loginButton(),
+                ],
+              ),
+            ),
     );
   }
 }
