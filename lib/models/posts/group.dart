@@ -1,12 +1,12 @@
 class Group {
-  final String? color;
-  final String? name;
-  final String? id;
+  final String color;
+  final String name;
+  final String id;
 
   Group({
-    this.id,
-    this.color,
-    this.name,
+    required this.id,
+    required this.color,
+    required this.name,
   });
 
   //Method

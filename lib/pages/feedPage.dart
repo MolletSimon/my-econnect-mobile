@@ -6,6 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:my_econnect/models/api.dart';
+import 'package:my_econnect/models/posts/group.dart';
 import 'package:my_econnect/models/posts/post.dart';
 import 'package:my_econnect/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -45,10 +46,47 @@ class _FeedPageState extends State<FeedPage> {
     });
   }
 
+  Color colorConvert(String color) {
+    color = color.replaceAll("#", "");
+    if (color.length == 6) {
+      return Color(int.parse("0xFF" + color));
+    } else if (color.length == 8) {
+      return Color(int.parse("0x" + color));
+    }
+
+    return Colors.white;
+  }
+
   Container _card(Post post, index) {
     return Container(
       child: Column(
         children: [_tile(post, index)],
+      ),
+    );
+  }
+
+  Container _tag(Group group) {
+    Color color = colorConvert('64' + group.color);
+
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        color: color,
+      ),
+      margin: EdgeInsets.only(right: 8, top: 10),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              '@' + group.name,
+              style: TextStyle(
+                fontStyle: FontStyle.italic,
+                fontSize: 14,
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
@@ -63,7 +101,9 @@ class _FeedPageState extends State<FeedPage> {
               Expanded(
                 flex: 2,
                 child: CircleAvatar(
-                  backgroundColor: Colors.indigo[700],
+                  backgroundColor: Colors.grey[100],
+                  backgroundImage: NetworkImage(
+                      'https://image.flaticon.com/icons/png/64/149/149071.png'),
                 ),
               ),
               Expanded(
@@ -73,8 +113,8 @@ class _FeedPageState extends State<FeedPage> {
                   child: Text(
                     post.user.firstname + ' ' + post.user.lastname,
                     style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
                   ),
                 ),
               ),
@@ -83,11 +123,27 @@ class _FeedPageState extends State<FeedPage> {
                 child: Text(
                   DateFormat('dd/MM').format(post.date),
                   textAlign: TextAlign.end,
-                  style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
+                  style: TextStyle(
+                    fontSize: 12,
+                  ),
                 ),
               )
             ],
           ),
+          post.group.isEmpty
+              ? Text('Pas de groupe')
+              : post.group.length == 6
+                  ? Row(
+                      children: [
+                        _tag(Group(
+                            id: 'all',
+                            name: 'Tous les groupes',
+                            color: '#C5C6D0'))
+                      ],
+                    )
+                  : Wrap(
+                      children: post.group.map((e) => _tag(e)).toList(),
+                    )
         ],
       ),
     );
