@@ -8,7 +8,7 @@ class Post {
   final List<Group> group;
   final bool? isPined;
   final bool isPoll;
-  final List<User>? liked;
+  final List<User> liked;
   final User user;
   final String? id;
   final Poll? poll;
@@ -20,7 +20,7 @@ class Post {
       required this.group,
       this.isPined,
       required this.isPoll,
-      this.liked,
+      required this.liked,
       required this.user,
       this.poll});
 

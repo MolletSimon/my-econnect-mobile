@@ -57,7 +57,10 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("My Connect"),
+        title: Image.asset(
+          'assets/images/logo.png',
+          height: 70,
+        ),
         backgroundColor: Colors.white,
         actions: [_disconnect()],
         centerTitle: false,

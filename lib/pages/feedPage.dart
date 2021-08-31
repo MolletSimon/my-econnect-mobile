@@ -8,6 +8,7 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:my_econnect/models/api.dart';
 import 'package:my_econnect/models/posts/group.dart';
 import 'package:my_econnect/models/posts/post.dart';
+import 'package:my_econnect/models/posts/user.dart' as UserPost;
 import 'package:my_econnect/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -63,6 +64,44 @@ class _FeedPageState extends State<FeedPage> {
         children: [_tile(post, index)],
       ),
     );
+  }
+
+  Container _buttons(Post post) {
+    return Container(
+      child: Row(
+        children: [
+          IconButton(
+            onPressed: () {
+              print('');
+            },
+            icon: Icon(Icons.thumb_up_outlined),
+            color: Color(0xFF23439B),
+          ),
+          Expanded(
+            child: Wrap(children: [
+              _liked(post.liked[0], post.liked.length),
+            ]),
+          )
+        ],
+      ),
+    );
+  }
+
+  Container _liked(UserPost.User user, int length) {
+    if (length == 1) {
+      return Container(
+        child: Text(user.firstname + ' ' + user.lastname + ' a aimé ceci'),
+      );
+    } else {
+      return Container(
+        child: Text(user.firstname +
+            ' ' +
+            user.lastname +
+            ' et ' +
+            length.toString() +
+            ' autres personnes ont aimés ceci'),
+      );
+    }
   }
 
   Container _tag(Group group) {
@@ -151,6 +190,7 @@ class _FeedPageState extends State<FeedPage> {
 
   Container _content(Post post) {
     return Container(
+      width: MediaQuery.of(context).size.width,
       margin: EdgeInsets.only(top: 15),
       color: Colors.grey[100],
       child: Padding(
@@ -165,6 +205,7 @@ class _FeedPageState extends State<FeedPage> {
 
   Container _poll(Post post) {
     return Container(
+      width: MediaQuery.of(context).size.width,
       margin: EdgeInsets.only(top: 15),
       color: Colors.grey[100],
       child: Padding(
@@ -180,7 +221,12 @@ class _FeedPageState extends State<FeedPage> {
   ListTile _tile(Post post, index) => ListTile(
         title: _title(post),
         isThreeLine: true,
-        subtitle: post.isPoll ? _poll(post) : _content(post),
+        subtitle: Column(
+          children: [
+            post.isPoll ? _poll(post) : _content(post),
+            _buttons(post),
+          ],
+        ),
       );
 
   ListView _postsListView(data) {
@@ -190,7 +236,8 @@ class _FeedPageState extends State<FeedPage> {
 
     return ListView.builder(
       shrinkWrap: true,
-      physics: const AlwaysScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
+      scrollDirection: Axis.vertical,
       itemCount: data.length,
       itemBuilder: (context, index) {
         return Column(
