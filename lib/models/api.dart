@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:my_econnect/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Api {
@@ -12,17 +13,25 @@ class Api {
     'Content-Type': 'application/json',
   };
 
-  Future<Response?> getPosts() async {
+  Future<Response?> getPosts(User user) async {
     SharedPreferences _prefs = await prefs;
-    String? token = _prefs.getString("token");
-    print(token);
+    String token = _prefs.getString("token") ?? "null";
 
-    if (token != null || token!.isEmpty) {
-      var response =
-          await http.post(Uri.parse(baseURL + '/post/get'), headers: {
-        HttpHeaders.authorizationHeader: 'Bearer $token',
-        'Content-Type': 'application/json',
+    if (token != "null" || token.isEmpty) {
+      var ids = [];
+
+      user.groups.forEach((group) {
+        ids.add(group["_id"]);
       });
+
+      var body = jsonEncode({"ids": ids, "isSuperadmin": user.isSuperadmin});
+
+      var response = await http.post(Uri.parse(baseURL + '/post/get'),
+          headers: {
+            HttpHeaders.authorizationHeader: 'Bearer $token',
+            'Content-Type': 'application/json',
+          },
+          body: body);
       return response;
     }
 
