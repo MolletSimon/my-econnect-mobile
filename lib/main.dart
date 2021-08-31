@@ -12,6 +12,7 @@ void main() async {
     WidgetsFlutterBinding.ensureInitialized();
     final prefs = await SharedPreferences.getInstance();
     token = prefs.getString("token");
+    print("token $token");
     runApp(MyApp(prefs));
   }, (error, st) => print(error));
 }

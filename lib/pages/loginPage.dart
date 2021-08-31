@@ -16,12 +16,14 @@ class _LoginPageState extends State<LoginPage> {
   String username = "";
   String password = "";
   bool loading = false;
+  bool error = false;
   dynamic snackBar = SnackBar(content: Text(''));
 
   Container _email() {
     return Container(
       margin: EdgeInsets.only(bottom: 10),
       child: TextField(
+        keyboardType: TextInputType.emailAddress,
         onChanged: (value) {
           username = value;
         },
@@ -111,12 +113,17 @@ class _LoginPageState extends State<LoginPage> {
               )),
               setState(() {
                 loading = false;
+                username = username;
               }),
             }
           else
             {
+              setState(() {
+                loading = false;
+              }),
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text('Connecté !'),
+                backgroundColor: Colors.green[800],
               )),
               Navigator.of(context).pushNamed(RoutePaths.Home)
             }

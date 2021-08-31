@@ -11,9 +11,8 @@ class FeedPage extends StatefulWidget {
 class _FeedPageState extends State<FeedPage> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    Api().getPosts();
+    Api().getPosts().then((value) => print(value?.body));
   }
 
   Container _inputPost() {
