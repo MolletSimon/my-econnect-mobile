@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:intl/intl.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:my_econnect/models/api.dart';
 import 'package:my_econnect/models/posts/post.dart';
@@ -78,9 +79,9 @@ class _FeedPageState extends State<FeedPage> {
                 ),
               ),
               Expanded(
-                flex: 7,
+                flex: 3,
                 child: Text(
-                  post.date.toString(),
+                  DateFormat('dd/MM').format(post.date),
                   textAlign: TextAlign.end,
                   style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
                 ),

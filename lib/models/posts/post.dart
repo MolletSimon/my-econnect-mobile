@@ -4,7 +4,7 @@ import 'package:my_econnect/models/posts/user.dart';
 
 class Post {
   final String? content;
-  final String? date;
+  final DateTime date;
   final List<Group>? group;
   final bool? isPined;
   final bool isPoll;
@@ -16,7 +16,7 @@ class Post {
   Post(
       {this.id,
       this.content,
-      this.date,
+      required this.date,
       this.group,
       this.isPined,
       required this.isPoll,
@@ -34,7 +34,7 @@ class Post {
       Post post = Post(
           id: value["_id"],
           content: value["content"],
-          date: value["date"],
+          date: DateTime.parse(value["date"]),
           group: Group.groupsList(value["group"]),
           isPined: value["isPined"],
           isPoll: value["isPoll"],

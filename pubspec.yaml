@@ -30,6 +30,7 @@ dependencies:
   shared_preferences: ^2.0.7
   http: ^0.13.3
   jwt_decoder: ^2.0.1
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:
