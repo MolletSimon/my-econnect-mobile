@@ -54,7 +54,6 @@ class _FeedPageState extends State<FeedPage> {
 
   Container _title(Post post) {
     return Container(
-      margin: EdgeInsets.only(left: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -69,7 +68,7 @@ class _FeedPageState extends State<FeedPage> {
               Expanded(
                 flex: 6,
                 child: Container(
-                  margin: EdgeInsets.only(left: 5),
+                  margin: EdgeInsets.only(left: 10),
                   child: Text(
                     post.user.firstname + ' ' + post.user.lastname,
                     style: TextStyle(
@@ -95,7 +94,7 @@ class _FeedPageState extends State<FeedPage> {
 
   Container _content(Post post) {
     return Container(
-      margin: EdgeInsets.only(left: 20, top: 15),
+      margin: EdgeInsets.only(top: 15),
       color: Colors.grey[100],
       child: Padding(
         padding: const EdgeInsets.all(14.0),
@@ -109,7 +108,7 @@ class _FeedPageState extends State<FeedPage> {
 
   Container _poll(Post post) {
     return Container(
-      margin: EdgeInsets.only(left: 20, top: 15),
+      margin: EdgeInsets.only(top: 15),
       color: Colors.grey[100],
       child: Padding(
         padding: const EdgeInsets.all(14.0),
