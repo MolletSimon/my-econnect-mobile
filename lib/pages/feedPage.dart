@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:my_econnect/models/api.dart';
@@ -21,6 +22,7 @@ class FeedPage extends StatefulWidget {
 
 class _FeedPageState extends State<FeedPage> {
   List<Post> posts = [];
+  late User currentUser;
 
   @override
   void initState() {
@@ -32,19 +34,59 @@ class _FeedPageState extends State<FeedPage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString("token") ?? "null";
     Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
-    User currentUser = User.oneUser(decodedToken);
+    currentUser = User.oneUser(decodedToken);
     _getPosts(currentUser);
+  }
+
+  void checkIfUserLiked() {
+    if (this.currentUser.id != "") {
+      posts.forEach((post) {
+        if (post.liked.isNotEmpty) {
+          post.liked.forEach((like) {
+            if (like.id == this.currentUser.id) {
+              setState(() {
+                post.userLiked = true;
+              });
+            }
+          });
+        }
+      });
+    } else {
+      checkIfUserLiked();
+    }
   }
 
   void _getPosts(user) {
     Api().getPosts(user).then((value) {
       setState(() {
         posts = Post.postsList(jsonDecode(value!.body));
-        posts.forEach((element) {
-          print(element.content);
-        });
       });
+
+      checkIfUserLiked();
     });
+  }
+
+  void _like(Post post) {
+    UserPost.User userWhoLiked = new UserPost.User(
+        firstname: currentUser.firstname,
+        lastname: currentUser.lastname,
+        id: currentUser.id);
+
+    if (post.userLiked) {
+      setState(() {
+        post.liked.removeWhere((element) => element.id == userWhoLiked.id);
+        post.userLiked = false;
+      });
+    } else {
+      setState(() {
+        post.liked.add(userWhoLiked);
+        post.userLiked = true;
+      });
+    }
+
+    Api().like(post).then((value) => {
+          if (value!.statusCode == 201) {checkIfUserLiked()}
+        });
   }
 
   Color colorConvert(String color) {
@@ -72,16 +114,19 @@ class _FeedPageState extends State<FeedPage> {
         children: [
           IconButton(
             onPressed: () {
-              print('');
+              _like(post);
             },
-            icon: Icon(Icons.thumb_up_outlined),
+            icon: post.userLiked
+                ? Icon(Icons.thumb_up)
+                : Icon(Icons.thumb_up_outlined),
             color: Color(0xFF23439B),
           ),
-          Expanded(
-            child: Wrap(children: [
-              _liked(post.liked[0], post.liked.length),
-            ]),
-          )
+          if (post.liked.isNotEmpty)
+            Expanded(
+              child: Wrap(children: [
+                _liked(post.liked[0], post.liked.length),
+              ]),
+            )
         ],
       ),
     );
@@ -94,6 +139,7 @@ class _FeedPageState extends State<FeedPage> {
       );
     } else {
       return Container(
+        margin: EdgeInsets.only(top: 10),
         child: Text(user.firstname +
             ' ' +
             user.lastname +
@@ -141,8 +187,8 @@ class _FeedPageState extends State<FeedPage> {
                 flex: 2,
                 child: CircleAvatar(
                   backgroundColor: Colors.grey[100],
-                  backgroundImage: NetworkImage(
-                      'https://image.flaticon.com/icons/png/64/149/149071.png'),
+                  backgroundImage:
+                      Image.asset('assets/images/PHUser.png').image,
                 ),
               ),
               Expanded(

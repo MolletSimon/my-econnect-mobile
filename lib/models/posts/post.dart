@@ -9,6 +9,7 @@ class Post {
   final bool? isPined;
   final bool isPoll;
   final List<User> liked;
+  bool userLiked;
   final User user;
   final String? id;
   final Poll? poll;
@@ -17,6 +18,7 @@ class Post {
       {this.id,
       this.content,
       required this.date,
+      required this.userLiked,
       required this.group,
       this.isPined,
       required this.isPoll,
@@ -33,6 +35,7 @@ class Post {
     results.forEach((value) {
       Post post = Post(
           id: value["_id"],
+          userLiked: false,
           content: value["content"],
           date: DateTime.parse(value["date"]),
           group: Group.groupsList(value["group"]),

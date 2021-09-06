@@ -59,7 +59,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Image.asset(
           'assets/images/logo.png',
-          height: 70,
+          height: 50,
         ),
         backgroundColor: Colors.white,
         actions: [_disconnect()],

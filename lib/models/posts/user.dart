@@ -9,6 +9,8 @@ class User {
     required this.lastname,
   });
 
+  Map toJson() => {'firstname': firstname, 'lastname': lastname, '_id': id};
+
   //Method
   static List<User> userList(List<dynamic> body) {
     List<User> l = [];
