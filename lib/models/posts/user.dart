@@ -3,14 +3,14 @@ class User {
   final String lastname;
   final String? id;
   String? picture;
-  String? phone;
+  String phone;
 
   User({
     this.id,
     this.picture,
     required this.firstname,
     required this.lastname,
-    this.phone,
+    required this.phone,
   });
 
   Map toJson() => {'firstname': firstname, 'lastname': lastname, '_id': id};
@@ -35,7 +35,7 @@ class User {
   }
 
   static User oneUser(Map<String, dynamic> body) {
-    print(body.values);
+    // print(body.values);
     User user = new User(
         id: body["id"],
         picture: "",

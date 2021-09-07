@@ -98,7 +98,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 BottomNavigationBarItem(
                   icon: new Icon(Icons.groups),
-                  label: "Groupes",
+                  label: "Mes Groupes",
                 ),
                 BottomNavigationBarItem(
                     icon: new Icon(Icons.person), label: "Mon compte")

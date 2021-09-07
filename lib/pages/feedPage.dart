@@ -79,6 +79,7 @@ class _FeedPageState extends State<FeedPage> {
     UserPost.User userWhoLiked = new UserPost.User(
         firstname: currentUser.firstname,
         lastname: currentUser.lastname,
+        phone: currentUser.phone,
         id: currentUser.id);
 
     if (post.userLiked) {

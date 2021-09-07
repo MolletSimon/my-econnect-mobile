@@ -53,7 +53,7 @@ class _GroupsPageState extends State<GroupsPage> {
                   ' ' +
                   group.responsable!.lastname +
                   ' - ' +
-                  group.responsable!.phone!,
+                  group.responsable!.phone,
               style: TextStyle(
                 fontStyle: FontStyle.italic,
                 fontSize: 14,
@@ -74,11 +74,10 @@ class _GroupsPageState extends State<GroupsPage> {
     _getGroups();
   }
 
-  void _getGroups() async {
+  Future<void> _getGroups() async {
     Api().getGroups(currentUser).then((value) => {
           if (value!.statusCode == 200)
             {
-              print(jsonDecode(value.body)),
               setState(() {
                 groups = Group.groupsList(jsonDecode(value.body));
               })
@@ -89,21 +88,20 @@ class _GroupsPageState extends State<GroupsPage> {
   Container _card(Group group, index) {
     return Container(
       decoration: BoxDecoration(
-          border: Border.all(width: 1),
           borderRadius: BorderRadius.circular(10),
-          color: colorConvert('96' + group.color),
+          color: colorConvert('78' + group.color),
           boxShadow: [
             BoxShadow(
-              color: colorConvert('28' + group.color),
+              color: Colors.grey.withOpacity(0.5),
               spreadRadius: 5,
               blurRadius: 7,
               offset: Offset(0, 3), // changes position of shadow
             ),
           ]),
-      width: MediaQuery.of(context).size.width * 0.8,
-      margin: EdgeInsets.only(bottom: 20),
+      width: MediaQuery.of(context).size.width * 0.9,
+      margin: EdgeInsets.only(bottom: 10, top: 10),
       child: Padding(
-        padding: const EdgeInsets.only(top: 16, bottom: 16),
+        padding: const EdgeInsets.only(top: 20, bottom: 20),
         child: Column(
           children: [
             Text(
@@ -145,6 +143,18 @@ class _GroupsPageState extends State<GroupsPage> {
         child: Center(
           child: Column(
             children: [
+              Container(
+                margin: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                child: Text(
+                  'Vous faites partie du/des groupe(s) suivants',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF23439B),
+                    fontSize: 17,
+                  ),
+                ),
+              ),
               groups.isEmpty
                   ? (CircularProgressIndicator())
                   : Expanded(
