@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:my_econnect/models/route.dart';
+import 'package:my_econnect/pages/agendaPage.dart';
 import 'package:my_econnect/pages/feedPage.dart';
+import 'package:my_econnect/pages/groupsPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -16,11 +19,10 @@ class _HomePageState extends State<HomePage> {
 
   final List<Widget> _children = [
     FeedPage(),
+    AgendaPage(),
+    GroupsPage(),
     Container(
-      child: Text("Agenda"),
-    ),
-    Container(
-      child: Text("Groupes"),
+      child: Text("Users"),
     )
   ];
 
@@ -80,23 +82,26 @@ class _HomePageState extends State<HomePage> {
               topRight: Radius.circular(30.0),
             ),
             child: BottomNavigationBar(
+              type: BottomNavigationBarType.fixed,
               currentIndex: _currentIndex,
-              showSelectedLabels: false,
-              showUnselectedLabels: false,
+              // showSelectedLabels: false,
+              // showUnselectedLabels: false,
               onTap: onTabTapped,
               items: [
                 BottomNavigationBarItem(
                   icon: new Icon(Icons.home),
-                  label: "Home",
+                  label: "Accueil",
                 ),
                 BottomNavigationBarItem(
                   icon: new Icon(Icons.today),
-                  label: "Calendar",
+                  label: "Agenda",
                 ),
                 BottomNavigationBarItem(
                   icon: new Icon(Icons.groups),
-                  label: "Groups",
+                  label: "Groupes",
                 ),
+                BottomNavigationBarItem(
+                    icon: new Icon(Icons.person), label: "Mon compte")
               ],
             ),
           )),

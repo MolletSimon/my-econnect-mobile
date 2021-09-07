@@ -1,13 +1,16 @@
+import 'package:my_econnect/models/posts/user.dart';
+
 class Group {
   final String color;
   final String name;
   final String id;
+  final User? responsable;
 
-  Group({
-    required this.id,
-    required this.color,
-    required this.name,
-  });
+  Group(
+      {required this.id,
+      required this.color,
+      required this.name,
+      this.responsable});
 
   //Method
   static List<Group> groupsList(List<dynamic> body) {
@@ -17,10 +20,12 @@ class Group {
 
     results.forEach((value) {
       Group post = Group(
-        id: value["_id"],
-        color: value["color"],
-        name: value["name"],
-      );
+          id: value["_id"],
+          color: value["color"],
+          name: value["name"],
+          responsable: value["responsable"] == null
+              ? null
+              : User.oneUser(value["responsable"]));
       l.add(post);
     });
 

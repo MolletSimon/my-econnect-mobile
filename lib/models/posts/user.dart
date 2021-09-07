@@ -2,11 +2,15 @@ class User {
   final String firstname;
   final String lastname;
   final String? id;
+  String? picture;
+  String? phone;
 
   User({
     this.id,
+    this.picture,
     required this.firstname,
     required this.lastname,
+    this.phone,
   });
 
   Map toJson() => {'firstname': firstname, 'lastname': lastname, '_id': id};
@@ -19,10 +23,11 @@ class User {
 
     results.forEach((value) {
       User post = User(
-        id: value["_id"],
-        firstname: value["firstname"],
-        lastname: value["lastname"],
-      );
+          id: value["_id"],
+          picture: "",
+          firstname: value["firstname"],
+          lastname: value["lastname"],
+          phone: value["phone"] == null ? "" : value["phone"]);
       l.add(post);
     });
 
@@ -30,11 +35,13 @@ class User {
   }
 
   static User oneUser(Map<String, dynamic> body) {
+    print(body.values);
     User user = new User(
-      id: body["_id"],
-      firstname: body["firstname"],
-      lastname: body["lastname"],
-    );
+        id: body["id"],
+        picture: "",
+        firstname: body["firstname"],
+        lastname: body["lastname"],
+        phone: body["phone"] == null ? "" : body["phone"]);
     return user;
   }
 }

@@ -17,6 +17,16 @@ class User {
     required this.mail,
   });
 
+  Map toJson() => {
+        'firstname': firstname,
+        'lastname': lastname,
+        '_id': id,
+        'groups': groups,
+        'isSuperadmin': isSuperadmin,
+        'phone': phone,
+        'mail': mail,
+      };
+
   //Method
   static List<User> userList(List<dynamic> body) {
     List<User> l = [];

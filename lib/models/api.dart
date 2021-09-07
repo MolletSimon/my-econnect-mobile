@@ -40,6 +40,25 @@ class Api {
     return null;
   }
 
+  Future<Response?> getGroups(User user) async {
+    SharedPreferences _prefs = await prefs;
+    String token = _prefs.getString("token") ?? "null";
+
+    if (token != "null" || token.isEmpty) {
+      var body = jsonEncode({"groups": user.groups});
+
+      var response = await http.post(Uri.parse(baseURL + '/group/getAll'),
+          headers: {
+            HttpHeaders.authorizationHeader: 'Bearer $token',
+            'Content-Type': 'application/json',
+          },
+          body: body);
+      return response;
+    }
+
+    return null;
+  }
+
   Future<Response?> like(Post post) async {
     SharedPreferences _prefs = await prefs;
     String token = _prefs.getString("token") ?? "null";
@@ -54,6 +73,23 @@ class Api {
             'Content-Type': 'application/json',
           },
           body: body);
+      return response;
+    }
+
+    return null;
+  }
+
+  Future<Response?> getPictures(UserPost.User user) async {
+    SharedPreferences _prefs = await prefs;
+    String token = _prefs.getString("token") ?? "null";
+
+    var id = user.id ?? "";
+    if (token != "null" || token.isEmpty) {
+      var response = await http
+          .get(Uri.parse(baseURL + '/user/get/picture/' + id), headers: {
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+        'Content-Type': 'application/json',
+      });
       return response;
     }
 

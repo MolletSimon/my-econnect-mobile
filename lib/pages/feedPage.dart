@@ -3,7 +3,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:my_econnect/models/api.dart';
@@ -30,7 +29,7 @@ class _FeedPageState extends State<FeedPage> {
     super.initState();
   }
 
-  void _getCurrentUser() async {
+  Future<void> _getCurrentUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString("token") ?? "null";
     Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
@@ -56,12 +55,22 @@ class _FeedPageState extends State<FeedPage> {
     }
   }
 
-  void _getPosts(user) {
+  void _getPictures() async {
+    posts.forEach((post) {
+      Api().getPictures(post.user).then((value) => {
+            setState(() {
+              post.user.picture = jsonDecode(value!.body)[0]['img'];
+            })
+          });
+    });
+  }
+
+  Future<void> _getPosts(user) async {
     Api().getPosts(user).then((value) {
       setState(() {
         posts = Post.postsList(jsonDecode(value!.body));
       });
-
+      _getPictures();
       checkIfUserLiked();
     });
   }
@@ -187,8 +196,10 @@ class _FeedPageState extends State<FeedPage> {
                 flex: 2,
                 child: CircleAvatar(
                   backgroundColor: Colors.grey[100],
-                  backgroundImage:
-                      Image.asset('assets/images/PHUser.png').image,
+                  radius: 25,
+                  backgroundImage: post.user.picture!.isEmpty
+                      ? Image.asset('assets/images/PHUser.png').image
+                      : MemoryImage(base64Decode(post.user.picture!)),
                 ),
               ),
               Expanded(
@@ -279,11 +290,10 @@ class _FeedPageState extends State<FeedPage> {
     if (data == null) {
       return ListView();
     }
-
     return ListView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      scrollDirection: Axis.vertical,
+      // shrinkWrap: true,
+      // scrollDirection: Axis.vertical,
+      // physics: const NeverScrollableScrollPhysics(),
       itemCount: data.length,
       itemBuilder: (context, index) {
         return Column(
@@ -314,15 +324,19 @@ class _FeedPageState extends State<FeedPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        child: SingleChildScrollView(
       child: Column(
         children: <Widget>[
           _inputPost(),
           posts.isEmpty
               ? (CircularProgressIndicator())
-              : (_postsListView(posts)),
+              : Expanded(
+                  child: (RefreshIndicator(
+                    child: _postsListView(posts),
+                    onRefresh: _getCurrentUser,
+                  )),
+                )
         ],
       ),
-    ));
+    );
   }
 }

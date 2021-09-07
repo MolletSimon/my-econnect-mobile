@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:my_econnect/models/route.dart' as RouterApp;
 import 'package:flutter/material.dart';
 import 'package:my_econnect/pages/homePage.dart';
-import 'package:my_econnect/pages/loginPage.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 String? token;
@@ -36,6 +36,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: [const Locale('fr', '')],
+      locale: const Locale('fr'),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           primarySwatch: MaterialColor(0xFF23439B, color),
