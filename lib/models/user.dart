@@ -1,9 +1,11 @@
+import 'package:my_econnect/models/posts/group.dart';
+
 class User {
   final String id;
   final String firstname;
   final String lastname;
   final String mail;
-  final List<dynamic> groups;
+  List<Group> groups;
   final bool isSuperadmin;
   final String phone;
 
@@ -38,7 +40,7 @@ class User {
           id: value["_id"],
           firstname: value["firstname"],
           lastname: value["lastname"],
-          groups: value["groups"],
+          groups: Group.groupsList(value["groups"]),
           isSuperadmin: value["isSuperadmin"],
           mail: value["mail"],
           phone: value["phone"].toString());
@@ -53,7 +55,7 @@ class User {
         id: body["_id"],
         firstname: body["firstname"].toString(),
         lastname: body["lastname"].toString(),
-        groups: body["groups"],
+        groups: Group.groupsList(body["groups"]),
         isSuperadmin: body["isSuperadmin"],
         mail: body["mail"],
         phone: body["phone"].toString());

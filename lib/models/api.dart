@@ -23,7 +23,7 @@ class Api {
       var ids = [];
 
       user.groups.forEach((group) {
-        ids.add(group["_id"]);
+        ids.add(group.id);
       });
 
       var body = jsonEncode({"ids": ids, "isSuperadmin": user.isSuperadmin});

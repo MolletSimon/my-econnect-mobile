@@ -12,6 +12,9 @@ class Group {
       required this.name,
       this.responsable});
 
+  Map toJson() =>
+      {'reponsable': responsable, 'color': color, 'name': name, '_id': id};
+
   //Method
   static List<Group> groupsList(List<dynamic> body) {
     List<Group> l = [];

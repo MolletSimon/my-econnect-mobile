@@ -21,7 +21,9 @@ class FeedPage extends StatefulWidget {
 
 class _FeedPageState extends State<FeedPage> {
   List<Post> posts = [];
+  List<Post> postsDisplayed = [];
   late User currentUser;
+  bool filter = false;
 
   @override
   void initState() {
@@ -34,6 +36,18 @@ class _FeedPageState extends State<FeedPage> {
     String token = prefs.getString("token") ?? "null";
     Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
     currentUser = User.oneUser(decodedToken);
+
+    if (currentUser.isSuperadmin) {
+      Api().getGroups(currentUser).then((value) => {
+            if (value!.statusCode == 200)
+              {
+                setState(() {
+                  currentUser.groups = Group.groupsList(jsonDecode(value.body));
+                })
+              }
+          });
+    }
+
     _getPosts(currentUser);
   }
 
@@ -69,6 +83,7 @@ class _FeedPageState extends State<FeedPage> {
     Api().getPosts(user).then((value) {
       setState(() {
         posts = Post.postsList(jsonDecode(value!.body));
+        postsDisplayed = posts;
       });
       _getPictures();
       checkIfUserLiked();
@@ -97,6 +112,87 @@ class _FeedPageState extends State<FeedPage> {
     Api().like(post).then((value) => {
           if (value!.statusCode == 201) {checkIfUserLiked()}
         });
+  }
+
+  void _displayFilters() {
+    if (!filter) {
+      showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          builder: (context) {
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 48.0, top: 20),
+              child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: currentUser.groups
+                      .map((group) => tileGroup(group))
+                      .toList()),
+            );
+          });
+    } else {
+      setState(() {
+        filter = false;
+        postsDisplayed = posts;
+      });
+    }
+  }
+
+  void _filterGroups(Group group) {
+    setState(() {
+      filter = true;
+      postsDisplayed = posts
+          .where((p) => p.group.where((g) => g.id == group.id).isNotEmpty)
+          .toList();
+      print(postsDisplayed);
+    });
+    Navigator.pop(context);
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(
+          "Vous venez de filtrer les posts par ${group.name} ! Pour désactiver le filtre, appuyez à nouveau sur l'entonnoir"),
+      backgroundColor: Colors.blue[300],
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10))),
+      behavior: SnackBarBehavior.floating,
+    ));
+  }
+
+  GestureDetector tileGroup(Group group) {
+    return GestureDetector(
+      onTap: () {
+        _filterGroups(group);
+      },
+      child: Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: colorConvert('78' + group.color),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 5,
+                blurRadius: 7,
+                offset: Offset(0, 3), // changes position of shadow
+              ),
+            ]),
+        width: MediaQuery.of(context).size.width * 0.9,
+        margin: EdgeInsets.only(bottom: 10, top: 10),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 20, bottom: 20),
+          child: Column(
+            children: [
+              Text(
+                group.name,
+                style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey[800],
+                  fontStyle: FontStyle.italic,
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Color colorConvert(String color) {
@@ -138,6 +234,24 @@ class _FeedPageState extends State<FeedPage> {
               ]),
             )
         ],
+      ),
+    );
+  }
+
+  Container _filters() {
+    return Container(
+      margin: EdgeInsets.only(right: 5),
+      child: IconButton(
+        icon: filter
+            ? Icon(
+                Icons.filter_alt,
+                color: Color(0xFF23439B),
+              )
+            : Icon(
+                Icons.filter_alt_outlined,
+                color: Color(0xFF23439B),
+              ),
+        onPressed: _displayFilters,
       ),
     );
   }
@@ -309,7 +423,7 @@ class _FeedPageState extends State<FeedPage> {
 
   Container _inputPost() {
     return Container(
-      margin: EdgeInsets.fromLTRB(20, 20, 20, 20),
+      margin: EdgeInsets.fromLTRB(20, 20, 0, 20),
       child: TextField(
         decoration: InputDecoration(
           hintText: 'Écrivez quelque chose !',
@@ -327,12 +441,23 @@ class _FeedPageState extends State<FeedPage> {
     return Container(
       child: Column(
         children: <Widget>[
-          _inputPost(),
-          posts.isEmpty
+          Row(
+            children: [
+              Expanded(
+                child: _inputPost(),
+                flex: 8,
+              ),
+              Expanded(
+                child: _filters(),
+                flex: 1,
+              ),
+            ],
+          ),
+          postsDisplayed.isEmpty
               ? (CircularProgressIndicator())
               : Expanded(
                   child: (RefreshIndicator(
-                    child: _postsListView(posts),
+                    child: _postsListView(postsDisplayed),
                     onRefresh: _getCurrentUser,
                   )),
                 )
