@@ -57,54 +57,57 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Image.asset(
-          'assets/images/logo.png',
-          height: 50,
-        ),
-        backgroundColor: Colors.white,
-        actions: [_disconnect()],
-        centerTitle: false,
-      ),
-      body: _children[_currentIndex],
-      bottomNavigationBar: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
-                topRight: Radius.circular(30), topLeft: Radius.circular(30)),
-            boxShadow: [
-              BoxShadow(color: Colors.black38, spreadRadius: 0, blurRadius: 10),
-            ],
+    return GestureDetector(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Image.asset(
+            'assets/images/logo.png',
+            height: 50,
           ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30.0),
-              topRight: Radius.circular(30.0),
-            ),
-            child: BottomNavigationBar(
-              type: BottomNavigationBarType.fixed,
-              currentIndex: _currentIndex,
-              // showSelectedLabels: false,
-              // showUnselectedLabels: false,
-              onTap: onTabTapped,
-              items: [
-                BottomNavigationBarItem(
-                  icon: new Icon(Icons.home),
-                  label: "Accueil",
-                ),
-                BottomNavigationBarItem(
-                  icon: new Icon(Icons.today),
-                  label: "Agenda",
-                ),
-                BottomNavigationBarItem(
-                  icon: new Icon(Icons.groups),
-                  label: "Mes Groupes",
-                ),
-                BottomNavigationBarItem(
-                    icon: new Icon(Icons.person), label: "Mon compte")
+          backgroundColor: Colors.white,
+          actions: [_disconnect()],
+          centerTitle: false,
+        ),
+        body: _children[_currentIndex],
+        bottomNavigationBar: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(30), topLeft: Radius.circular(30)),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black38, spreadRadius: 0, blurRadius: 10),
               ],
             ),
-          )),
+            child: ClipRRect(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30.0),
+                topRight: Radius.circular(30.0),
+              ),
+              child: BottomNavigationBar(
+                type: BottomNavigationBarType.fixed,
+                currentIndex: _currentIndex,
+                // showSelectedLabels: false,
+                // showUnselectedLabels: false,
+                onTap: onTabTapped,
+                items: [
+                  BottomNavigationBarItem(
+                    icon: new Icon(Icons.home),
+                    label: "Accueil",
+                  ),
+                  BottomNavigationBarItem(
+                    icon: new Icon(Icons.today),
+                    label: "Agenda",
+                  ),
+                  BottomNavigationBarItem(
+                    icon: new Icon(Icons.groups),
+                    label: "Mes Groupes",
+                  ),
+                  BottomNavigationBarItem(
+                      icon: new Icon(Icons.person), label: "Mon compte")
+                ],
+              ),
+            )),
+      ),
     );
   }
 }

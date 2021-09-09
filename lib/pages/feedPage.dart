@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:my_econnect/models/api.dart';
@@ -10,6 +11,7 @@ import 'package:my_econnect/models/posts/group.dart';
 import 'package:my_econnect/models/posts/post.dart';
 import 'package:my_econnect/models/posts/user.dart' as UserPost;
 import 'package:my_econnect/models/user.dart';
+import 'package:my_econnect/pages/post.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FeedPage extends StatefulWidget {
@@ -24,6 +26,7 @@ class _FeedPageState extends State<FeedPage> {
   List<Post> postsDisplayed = [];
   late User currentUser;
   bool filter = false;
+  bool writing = false;
 
   @override
   void initState() {
@@ -156,43 +159,52 @@ class _FeedPageState extends State<FeedPage> {
     ));
   }
 
-  GestureDetector tileGroup(Group group) {
-    return GestureDetector(
-      onTap: () {
-        _filterGroups(group);
-      },
-      child: Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: colorConvert('78' + group.color),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 5,
-                blurRadius: 7,
-                offset: Offset(0, 3), // changes position of shadow
+  void publish(String content) {
+    if (content.isNotEmpty) {
+      print(content);
+    }
+  }
+
+  Container _cardGroup(Group group) {
+    return Container(
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: colorConvert('78' + group.color),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: Offset(0, 3), // changes position of shadow
+            ),
+          ]),
+      width: MediaQuery.of(context).size.width * 0.9,
+      margin: EdgeInsets.only(bottom: 10, top: 10),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 20, bottom: 20),
+        child: Column(
+          children: [
+            Text(
+              group.name,
+              style: TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.bold,
+                color: Colors.grey[800],
+                fontStyle: FontStyle.italic,
               ),
-            ]),
-        width: MediaQuery.of(context).size.width * 0.9,
-        margin: EdgeInsets.only(bottom: 10, top: 10),
-        child: Padding(
-          padding: const EdgeInsets.only(top: 20, bottom: 20),
-          child: Column(
-            children: [
-              Text(
-                group.name,
-                style: TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.grey[800],
-                  fontStyle: FontStyle.italic,
-                ),
-              )
-            ],
-          ),
+            )
+          ],
         ),
       ),
     );
+  }
+
+  GestureDetector tileGroup(Group group) {
+    return GestureDetector(
+        onTap: () {
+          _filterGroups(group);
+        },
+        child: _cardGroup(group));
   }
 
   Color colorConvert(String color) {
@@ -424,14 +436,27 @@ class _FeedPageState extends State<FeedPage> {
   Container _inputPost() {
     return Container(
       margin: EdgeInsets.fromLTRB(20, 20, 0, 20),
-      child: TextField(
-        decoration: InputDecoration(
-          hintText: 'Écrivez quelque chose !',
-          contentPadding: EdgeInsets.only(left: 25),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(200),
+      child: Column(
+        children: [
+          TextField(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => PostPage(
+                            currentUser: currentUser,
+                          )));
+            },
+            readOnly: true,
+            decoration: InputDecoration(
+              hintText: 'Écrivez quelque chose !',
+              contentPadding: EdgeInsets.only(left: 25, bottom: 25),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(200),
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
