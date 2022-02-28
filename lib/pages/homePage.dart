@@ -1,3 +1,5 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:my_econnect/models/route.dart';
 import 'package:my_econnect/pages/agendaPage.dart';
@@ -17,12 +19,27 @@ class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
+  @override
+  void initState() {
+    super.initState();
+
+    FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? message) => {
+      if(message!=null) {
+        print(message)
+      }
+    });
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print(message.data[0]);
+    });
+  }
+
   final List<Widget> _children = [
     FeedPage(),
     AgendaPage(),
     GroupsPage(),
     Container(
-      child: Text("Users"),
+      child: Text("L'application est encore en cours de développement et cette fonctionnalité n'est pas encore disponible. Merci d'utiliser le site my-connect.fr pour utiliser ces fonctionnalités."),
     )
   ];
 

@@ -44,9 +44,11 @@ class _FeedPageState extends State<FeedPage> {
       Api().getGroups(currentUser).then((value) => {
             if (value!.statusCode == 200)
               {
-                setState(() {
-                  currentUser.groups = Group.groupsList(jsonDecode(value.body));
-                })
+                if (mounted) {
+                  setState(() {
+                    currentUser.groups = Group.groupsList(jsonDecode(value.body));
+                  })
+                }
               }
           });
     }
@@ -60,9 +62,11 @@ class _FeedPageState extends State<FeedPage> {
         if (post.liked.isNotEmpty) {
           post.liked.forEach((like) {
             if (like.id == this.currentUser.id) {
-              setState(() {
-                post.userLiked = true;
-              });
+              if(mounted) {
+                setState(() {
+                  post.userLiked = true;
+                });
+              }
             }
           });
         }
@@ -75,19 +79,23 @@ class _FeedPageState extends State<FeedPage> {
   void _getPictures() async {
     posts.forEach((post) {
       Api().getPictures(post.user).then((value) => {
+        if (mounted) {
             setState(() {
               post.user.picture = jsonDecode(value!.body)[0]['img'];
             })
-          });
+        }
+        });
     });
   }
 
   Future<void> _getPosts(user) async {
     Api().getPosts(user).then((value) {
-      setState(() {
-        posts = Post.postsList(jsonDecode(value!.body));
-        postsDisplayed = posts;
-      });
+      if (mounted) {
+        setState(() {
+          posts = Post.postsList(jsonDecode(value!.body));
+          postsDisplayed = posts;
+        });
+      }
       _getPictures();
       checkIfUserLiked();
     });
@@ -101,10 +109,12 @@ class _FeedPageState extends State<FeedPage> {
         id: currentUser.id);
 
     if (post.userLiked) {
-      setState(() {
-        post.liked.removeWhere((element) => element.id == userWhoLiked.id);
-        post.userLiked = false;
-      });
+      if (mounted) {
+        setState(() {
+          post.liked.removeWhere((element) => element.id == userWhoLiked.id);
+          post.userLiked = false;
+        });
+      }
     } else {
       setState(() {
         post.liked.add(userWhoLiked);
@@ -313,6 +323,7 @@ class _FeedPageState extends State<FeedPage> {
   }
 
   Container _title(Post post) {
+    post.user.picture ??= "";
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
