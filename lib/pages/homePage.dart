@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> {
     AgendaPage(),
     GroupsPage(),
     Container(
-      child: Text("Users"),
+      child: Text("L'application est encore en cours de développement et cette fonctionnalité n'est pas encore disponible. Merci d'utiliser le site my-connect.fr pour utiliser ces fonctionnalités."),
     )
   ];
 
