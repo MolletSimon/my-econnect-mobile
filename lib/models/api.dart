@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:my_econnect/models/posts/post.dart';
 import 'package:my_econnect/models/posts/user.dart' as UserPost;
 import 'package:my_econnect/models/user.dart';
@@ -104,6 +106,23 @@ class Api {
     if (response.statusCode == 201) {
       SharedPreferences _prefs = await SharedPreferences.getInstance();
       _prefs.setString("token", jsonDecode(response.body)["token"]);
+
+      Map<String, dynamic> decodedToken = JwtDecoder.decode(response.body);
+      User currentUser = User.oneUser(decodedToken);
+      if (currentUser.isSuperadmin) {
+        await FirebaseMessaging.instance
+            .subscribeToTopic('60ce71b2a9392e00158655b3');
+        await FirebaseMessaging.instance
+            .subscribeToTopic('60ce71f3a9392e00158655b4');
+        await FirebaseMessaging.instance
+            .subscribeToTopic('60ce724aa9392e00158655b5');
+        await FirebaseMessaging.instance
+            .subscribeToTopic('60ce727ba9392e00158655b6');
+        await FirebaseMessaging.instance
+            .subscribeToTopic('60ce729aa9392e00158655b7');
+        await FirebaseMessaging.instance
+            .subscribeToTopic('60ce72bca9392e00158655b8');
+      }
     }
     return response;
   }
