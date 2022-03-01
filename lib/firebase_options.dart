@@ -27,10 +27,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -42,6 +39,17 @@ class DefaultFirebaseOptions {
       'DefaultFirebaseOptions are not supported for this platform.',
     );
   }
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyDf6sqSbpk6B9y5rSoRxBa-whCxoV4j8vE',
+    appId: '1:729590756186:ios:5d54a6eb9fda4a1dac3963',
+    messagingSenderId: '729590756186',
+    projectId: 'mye-connect',
+    storageBucket: 'mye-connect.appspot.com',
+    iosClientId:
+        '729590756186-bv966akb3up841vcfk5sf64209j9k5r5.apps.googleusercontent.com',
+    iosBundleId: 'fr.connect.my-econnect',
+  );
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBsldnGYnnPV38DnagK0lE5sIDfwFhl5Io',
