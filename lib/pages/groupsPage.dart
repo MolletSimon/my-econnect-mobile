@@ -2,9 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:my_econnect/models/api.dart';
+import 'package:my_econnect/services/apiService.dart';
 import 'package:my_econnect/models/posts/group.dart';
 import 'package:my_econnect/models/user.dart';
+import 'package:my_econnect/services/userService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GroupsPage extends StatefulWidget {
@@ -75,7 +76,7 @@ class _GroupsPageState extends State<GroupsPage> {
   }
 
   Future<void> _getGroups() async {
-    Api().getGroups(currentUser).then((value) => {
+    UserService().getGroups(currentUser).then((value) => {
           if (value!.statusCode == 200)
             {
               setState(() {

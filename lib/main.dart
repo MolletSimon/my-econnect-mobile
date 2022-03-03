@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:my_econnect/models/route.dart' as RouterApp;
 import 'package:flutter/material.dart';
-import 'package:my_econnect/pages/homePage.dart';
+import 'package:my_econnect/pages/home/homePage.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';

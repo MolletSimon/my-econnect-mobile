@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:my_econnect/models/api.dart';
 import 'package:my_econnect/models/posts/group.dart';
 import 'package:my_econnect/models/posts/user.dart' as UserPost;
 import 'package:my_econnect/models/user.dart';
+import 'package:my_econnect/services/userService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PostPage extends StatefulWidget {
@@ -17,7 +17,14 @@ class PostPage extends StatefulWidget {
 
 class _PostPageState extends State<PostPage> {
   List<Group> groupsSelected = [];
-  User currentUser = new User(id: "id", firstname: "Utilisateur", lastname: "", groups: [new Group(color: '', id: '', name: 'groupe')], isSuperadmin: false, phone: "", mail: "");
+  User currentUser = new User(
+      id: "id",
+      firstname: "Utilisateur",
+      lastname: "",
+      groups: [new Group(color: '', id: '', name: 'groupe')],
+      isSuperadmin: false,
+      phone: "",
+      mail: "");
   String dropdownValue = '';
   String content = '';
 
@@ -30,14 +37,14 @@ class _PostPageState extends State<PostPage> {
     });
   }
 
-    Future<void> _getCurrentUser() async {
+  Future<void> _getCurrentUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString("token") ?? "null";
     Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
     currentUser = User.oneUser(decodedToken);
 
     if (currentUser.isSuperadmin) {
-      Api().getGroups(currentUser).then((value) => {
+      UserService().getGroups(currentUser).then((value) => {
             if (value!.statusCode == 200)
               {
                 if (mounted)
@@ -54,7 +61,7 @@ class _PostPageState extends State<PostPage> {
   }
 
   void _getPicture() {
-    Api()
+    UserService()
         .getPictures(UserPost.User(
             firstname: currentUser.firstname,
             lastname: currentUser.lastname,
@@ -288,51 +295,50 @@ class _PostPageState extends State<PostPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Center(
-          child: Container(
-            margin: EdgeInsets.all(20),
-            child: Column(
+      child: Container(
+        margin: EdgeInsets.all(20),
+        child: Column(
+          children: [
+            TextField(
+              onChanged: (value) {
+                setState(() {
+                  content = value;
+                });
+              },
+              // keyboardType: TextInputType.multiline,
+              maxLines: 5,
+              onEditingComplete: () {
+                setState(() {
+                  FocusScope.of(context).unfocus();
+                  groupsSelected = [];
+                });
+              },
+              decoration: InputDecoration(
+                hintText: 'Écrivez quelque chose !',
+                contentPadding: EdgeInsets.only(left: 25, bottom: 25),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+            ),
+            Row(
               children: [
-                
-                TextField(
-                  onChanged: (value) {
-                    setState(() {
-                      content = value;
-                    });
-                  },
-                  // keyboardType: TextInputType.multiline,
-                  maxLines: 5,
-                  onEditingComplete: () {
-                    setState(() {
-                      FocusScope.of(context).unfocus();
-                      groupsSelected = [];
-                    });
-                  },
-                  decoration: InputDecoration(
-                    hintText: 'Écrivez quelque chose !',
-                    contentPadding: EdgeInsets.only(left: 25, bottom: 25),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
+                Flexible(
+                  child: _groupsPost(),
+                  flex: 8,
                 ),
-                Row(
-                  children: [
-                    Flexible(
-                      child: _groupsPost(),
-                      flex: 8,
-                    ),
-                    Flexible(child: _publishButton(), flex: 2)
-                  ],
-                ),
-                if (groupsSelected.isNotEmpty) _groupsSelected(),
-                Expanded(child: GestureDetector(
-                  onTap: () {
-                    FocusScope.of(context).unfocus();
-                  },
-                ))
+                Flexible(child: _publishButton(), flex: 2)
               ],
             ),
-          ),
-        ));
+            if (groupsSelected.isNotEmpty) _groupsSelected(),
+            Expanded(child: GestureDetector(
+              onTap: () {
+                FocusScope.of(context).unfocus();
+              },
+            ))
+          ],
+        ),
+      ),
+    ));
   }
 }

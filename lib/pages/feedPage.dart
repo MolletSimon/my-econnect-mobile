@@ -1,17 +1,15 @@
 import 'dart:convert';
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:my_econnect/models/api.dart';
+import 'package:my_econnect/services/apiService.dart';
 import 'package:my_econnect/models/posts/group.dart';
 import 'package:my_econnect/models/posts/post.dart';
 import 'package:my_econnect/models/posts/user.dart' as UserPost;
 import 'package:my_econnect/models/user.dart';
 import 'package:my_econnect/pages/post.dart';
+import 'package:my_econnect/services/postService.dart';
+import 'package:my_econnect/services/userService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FeedPage extends StatefulWidget {
@@ -41,7 +39,7 @@ class _FeedPageState extends State<FeedPage> {
     currentUser = User.oneUser(decodedToken);
 
     if (currentUser.isSuperadmin) {
-      Api().getGroups(currentUser).then((value) => {
+      UserService().getGroups(currentUser).then((value) => {
             if (value!.statusCode == 200)
               {
                 if (mounted)
@@ -80,7 +78,7 @@ class _FeedPageState extends State<FeedPage> {
 
   void _getPictures() async {
     posts.forEach((post) {
-      Api().getPictures(post.user).then((value) => {
+      UserService().getPictures(post.user).then((value) => {
             if (mounted)
               {
                 setState(() {
@@ -92,7 +90,7 @@ class _FeedPageState extends State<FeedPage> {
   }
 
   Future<void> _getPosts(user) async {
-    Api().getPosts(user).then((value) {
+    PostService().getPosts(user).then((value) {
       if (mounted) {
         setState(() {
           posts = Post.postsList(jsonDecode(value!.body));
@@ -125,7 +123,7 @@ class _FeedPageState extends State<FeedPage> {
       });
     }
 
-    Api().like(post).then((value) => {
+    PostService().like(post).then((value) => {
           if (value!.statusCode == 201) {checkIfUserLiked()}
         });
   }
@@ -234,17 +232,17 @@ class _FeedPageState extends State<FeedPage> {
   Container _card(Post post, index) {
     return Container(
       decoration: BoxDecoration(
-          color: Colors.white, 
-          borderRadius: new BorderRadius.circular(30),
-          boxShadow: [
-            BoxShadow(
-              color: Color.fromARGB(255, 211, 211, 211).withOpacity(0.1),
-              spreadRadius: 1,
-              blurRadius: 10,
-              offset: Offset(0, 3), // changes position of shadow
-            ),
-          ],
-        ),
+        color: Colors.white,
+        borderRadius: new BorderRadius.circular(30),
+        boxShadow: [
+          BoxShadow(
+            color: Color.fromARGB(255, 211, 211, 211).withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 10,
+            offset: Offset(0, 3), // changes position of shadow
+          ),
+        ],
+      ),
       margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(1, 4, 1, 1),
@@ -258,7 +256,6 @@ class _FeedPageState extends State<FeedPage> {
   Container _buttons(Post post) {
     return Container(
       color: Colors.transparent,
-
       child: Row(
         children: [
           IconButton(
@@ -369,7 +366,8 @@ class _FeedPageState extends State<FeedPage> {
                       child: Text(
                         post.user.firstname + ' ' + post.user.lastname,
                         style: TextStyle(
-                            fontWeight: FontWeight.bold,),
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                     post.group.isEmpty
@@ -475,10 +473,7 @@ class _FeedPageState extends State<FeedPage> {
           TextField(
             onTap: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => PostPage(
-                          )));
+                  context, MaterialPageRoute(builder: (context) => PostPage()));
             },
             readOnly: true,
             decoration: InputDecoration(

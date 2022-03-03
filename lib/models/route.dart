@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_econnect/pages/homePage.dart';
+import 'package:my_econnect/pages/home/homePage.dart';
 import 'package:my_econnect/pages/loginPage.dart';
 
 class RoutePaths {

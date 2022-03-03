@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:my_econnect/models/api.dart';
+import 'package:my_econnect/services/apiService.dart';
 import 'package:my_econnect/models/route.dart';
+import 'package:my_econnect/services/userService.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -102,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       loading = true;
     });
-    Api().login(username, password).then((value) => {
+    UserService().login(username, password).then((value) => {
           if (value.statusCode == 401)
             {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -134,7 +135,7 @@ class _LoginPageState extends State<LoginPage> {
       body: loading
           ? (_loading())
           : SingleChildScrollView(
-            child: Container(
+              child: Container(
                 margin: EdgeInsets.only(left: 30, right: 30, top: 150),
                 child: Column(
                   children: [
@@ -145,7 +146,7 @@ class _LoginPageState extends State<LoginPage> {
                   ],
                 ),
               ),
-          ),
+            ),
     );
   }
 }
