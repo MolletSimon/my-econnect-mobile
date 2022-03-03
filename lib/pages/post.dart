@@ -11,6 +11,8 @@ import 'package:my_econnect/services/postService.dart';
 import 'package:my_econnect/services/userService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../utils/utils.dart';
+
 class PostPage extends StatefulWidget {
   PostPage({Key? key}) : super(key: key);
 
@@ -19,15 +21,12 @@ class PostPage extends StatefulWidget {
 }
 
 class _PostPageState extends State<PostPage> {
+  // SERVICES
+  UserService userService = new UserService();
+  Utils utils = new Utils();
+
   List<Group> groupsSelected = [];
-  User currentUser = new User(
-      id: "id",
-      firstname: "Utilisateur",
-      lastname: "",
-      groups: [new Group(color: '', id: '', name: 'groupe')],
-      isSuperadmin: false,
-      phone: "",
-      mail: "");
+  User currentUser = UserService().initEmptyUser();
   String dropdownValue = '';
   String content = '';
 
@@ -114,7 +113,7 @@ class _PostPageState extends State<PostPage> {
     return Container(
       child: Row(
         children: [
-          if (currentUser.picture != null) _profilePicture(),
+          // if (currentUser.picture != null) _profilePicture(),
           Expanded(
             child: Container(
               margin: EdgeInsets.only(left: 15, bottom: 20),
@@ -148,17 +147,6 @@ class _PostPageState extends State<PostPage> {
         ],
       ),
     );
-  }
-
-  Color colorConvert(String color) {
-    color = color.replaceAll("#", "");
-    if (color.length == 6) {
-      return Color(int.parse("0xFF" + color));
-    } else if (color.length == 8) {
-      return Color(int.parse("0x" + color));
-    }
-
-    return Colors.white;
   }
 
   Align _groupsPost() {
@@ -207,7 +195,7 @@ class _PostPageState extends State<PostPage> {
                       child: Text(
                         e.name,
                         style: TextStyle(
-                            color: colorConvert(e.color),
+                            color: utils.colorConvert(e.color),
                             fontWeight: FontWeight.bold,
                             fontStyle: FontStyle.italic),
                       ),
@@ -283,7 +271,7 @@ class _PostPageState extends State<PostPage> {
               child: Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: colorConvert('78' + e.color),
+                    color: utils.colorConvert('78' + e.color),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.grey.withOpacity(0.5),
@@ -320,52 +308,51 @@ class _PostPageState extends State<PostPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Center(
-      child: Container(
-        margin: EdgeInsets.all(20),
-        child: Column(
-          children: [
-            TextField(
-              onChanged: (value) {
-                setState(() {
-                  content = value;
-                });
-              },
-              // keyboardType: TextInputType.multiline,
-              maxLines: 5,
-              onEditingComplete: () {
-                setState(() {
-                  FocusScope.of(context).unfocus();
-                  groupsSelected = [];
-                });
-              },
-              decoration: InputDecoration(
-                hintText: 'Écrivez quelque chose !',
-                contentPadding: EdgeInsets.only(left: 25, bottom: 25),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Scaffold(
+          body: Center(
+        child: Container(
+          margin: EdgeInsets.all(20),
+          child: ListView(
+            children: [
+              if (currentUser.id != "id") _user(),
+              TextField(
+                onChanged: (value) {
+                  setState(() {
+                    content = value;
+                  });
+                },
+                // keyboardType: TextInputType.multiline,
+                maxLines: 5,
+                onEditingComplete: () {
+                  setState(() {
+                    FocusScope.of(context).unfocus();
+                    groupsSelected = [];
+                  });
+                },
+                decoration: InputDecoration(
+                  hintText: 'Écrivez quelque chose !',
+                  contentPadding: EdgeInsets.only(left: 25, bottom: 25),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
                 ),
               ),
-            ),
-            Row(
-              children: [
-                Flexible(
-                  child: _groupsPost(),
-                  flex: 8,
-                ),
-                Flexible(child: _publishButton(), flex: 2)
-              ],
-            ),
-            if (groupsSelected.isNotEmpty) _groupsSelected(),
-            Expanded(child: GestureDetector(
-              onTap: () {
-                FocusScope.of(context).unfocus();
-              },
-            ))
-          ],
+              Row(
+                children: [
+                  Flexible(
+                    child: _groupsPost(),
+                    flex: 8,
+                  ),
+                  Flexible(child: _publishButton(), flex: 2)
+                ],
+              ),
+              if (groupsSelected.isNotEmpty) _groupsSelected(),
+            ],
+          ),
         ),
-      ),
-    ));
+      )),
+    );
   }
 }

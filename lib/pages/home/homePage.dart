@@ -1,6 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:my_econnect/pages/agendaPage.dart';
+import 'package:my_econnect/pages/agenda/agendaPage.dart';
 import 'package:my_econnect/pages/feedPage.dart';
 import 'package:my_econnect/pages/groupsPage.dart';
 import 'package:my_econnect/pages/post.dart';

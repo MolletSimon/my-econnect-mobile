@@ -96,4 +96,20 @@ class UserService {
 
     return null;
   }
+
+  Future<User> getCurrentUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString("token") ?? "null";
+    Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+    User currentUser = User.oneUser(decodedToken);
+
+    if (currentUser.isSuperadmin) {
+      UserService().getGroups(currentUser).then((value) => {
+            if (value!.statusCode == 200)
+              {currentUser.groups = Group.groupsList(jsonDecode(value.body))}
+          });
+    }
+
+    return currentUser;
+  }
 }

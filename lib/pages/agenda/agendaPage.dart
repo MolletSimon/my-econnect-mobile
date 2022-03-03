@@ -3,13 +3,15 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:my_econnect/models/appointments.dart';
+import 'package:my_econnect/pages/agenda/widgets/index.dart';
 import 'package:my_econnect/services/agendaService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-import '../models/posts/group.dart';
-import '../models/user.dart';
-import '../services/userService.dart';
+import '../../models/posts/group.dart';
+import '../../models/user.dart';
+import '../../services/userService.dart';
+import '../../utils/utils.dart';
 
 class AgendaPage extends StatefulWidget {
   AgendaPage({Key? key}) : super(key: key);
@@ -20,6 +22,7 @@ class AgendaPage extends StatefulWidget {
 
 class _AgendaPageState extends State<AgendaPage> {
   User currentUser = UserService().initEmptyUser();
+  Utils utils = new Utils();
   List<AppointmentConnect> appointments = [];
 
   @override
@@ -40,17 +43,6 @@ class _AgendaPageState extends State<AgendaPage> {
         });
   }
 
-  Color colorConvert(String color) {
-    color = color.replaceAll("#", "");
-    if (color.length == 6) {
-      return Color(int.parse("0xFF" + color));
-    } else if (color.length == 8) {
-      return Color(int.parse("0x" + color));
-    }
-
-    return Colors.white;
-  }
-
   List<Meeting> _getDataSource() {
     final List<Meeting> meetings = <Meeting>[];
     for (var i = 0; i < appointments.length; i++) {
@@ -58,7 +50,7 @@ class _AgendaPageState extends State<AgendaPage> {
         eventName: appointments[i].subject,
         from: appointments[i].startTime.add(const Duration(days: 1)),
         to: appointments[i].endTime,
-        background: colorConvert(appointments[i].group["color"]),
+        background: utils.colorConvert(appointments[i].group["color"]),
         isAllDay: appointments[i].isAllDay,
       ));
     }
@@ -109,50 +101,4 @@ class _AgendaPageState extends State<AgendaPage> {
       ),
     );
   }
-}
-
-class AppDataSource extends CalendarDataSource {
-  AppDataSource(List<Meeting> source) {
-    appointments = source;
-  }
-
-  @override
-  DateTime getStartTime(int index) {
-    return appointments![index].from;
-  }
-
-  @override
-  DateTime getEndTime(int index) {
-    return appointments![index].to;
-  }
-
-  @override
-  String getSubject(int index) {
-    return appointments![index].eventName;
-  }
-
-  @override
-  Color getColor(int index) {
-    return appointments![index].background;
-  }
-
-  @override
-  bool isAllDay(int index) {
-    return appointments![index].isAllDay;
-  }
-}
-
-class Meeting {
-  Meeting(
-      {this.eventName = '',
-      required this.from,
-      required this.to,
-      required this.background,
-      this.isAllDay = false});
-
-  String eventName;
-  DateTime from;
-  DateTime to;
-  Color background;
-  bool isAllDay;
 }

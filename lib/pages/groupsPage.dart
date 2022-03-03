@@ -8,6 +8,8 @@ import 'package:my_econnect/models/user.dart';
 import 'package:my_econnect/services/userService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../utils/utils.dart';
+
 class GroupsPage extends StatefulWidget {
   GroupsPage({Key? key}) : super(key: key);
 
@@ -16,6 +18,8 @@ class GroupsPage extends StatefulWidget {
 }
 
 class _GroupsPageState extends State<GroupsPage> {
+  Utils utils = new Utils();
+
   late User currentUser;
   List<Group> groups = [];
 
@@ -25,19 +29,8 @@ class _GroupsPageState extends State<GroupsPage> {
     super.initState();
   }
 
-  Color colorConvert(String color) {
-    color = color.replaceAll("#", "");
-    if (color.length == 6) {
-      return Color(int.parse("0xFF" + color));
-    } else if (color.length == 8) {
-      return Color(int.parse("0x" + color));
-    }
-
-    return Colors.white;
-  }
-
   Container _responsable(Group group) {
-    Color color = colorConvert('64' + group.color);
+    Color color = utils.colorConvert('64' + group.color);
 
     return Container(
       decoration: BoxDecoration(
@@ -90,7 +83,7 @@ class _GroupsPageState extends State<GroupsPage> {
     return Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: colorConvert('78' + group.color),
+          color: utils.colorConvert('78' + group.color),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.5),

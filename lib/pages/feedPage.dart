@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:my_econnect/services/apiService.dart';
 import 'package:my_econnect/models/posts/group.dart';
 import 'package:my_econnect/models/posts/post.dart';
 import 'package:my_econnect/models/posts/user.dart' as UserPost;
@@ -10,7 +9,9 @@ import 'package:my_econnect/models/user.dart';
 import 'package:my_econnect/pages/post.dart';
 import 'package:my_econnect/services/postService.dart';
 import 'package:my_econnect/services/userService.dart';
+import 'package:my_econnect/utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:skeletons/skeletons.dart';
 
 class FeedPage extends StatefulWidget {
   FeedPage({Key? key}) : super(key: key);
@@ -20,6 +21,8 @@ class FeedPage extends StatefulWidget {
 }
 
 class _FeedPageState extends State<FeedPage> {
+  Utils utils = new Utils();
+
   List<Post> posts = [];
   List<Post> postsDisplayed = [];
   late User currentUser;
@@ -180,7 +183,7 @@ class _FeedPageState extends State<FeedPage> {
     return Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: colorConvert('78' + group.color),
+          color: utils.colorConvert('78' + group.color),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.5),
@@ -218,17 +221,6 @@ class _FeedPageState extends State<FeedPage> {
         child: _cardGroup(group));
   }
 
-  Color colorConvert(String color) {
-    color = color.replaceAll("#", "");
-    if (color.length == 6) {
-      return Color(int.parse("0xFF" + color));
-    } else if (color.length == 8) {
-      return Color(int.parse("0x" + color));
-    }
-
-    return Colors.white;
-  }
-
   Container _card(Post post, index) {
     return Container(
       decoration: BoxDecoration(
@@ -255,7 +247,10 @@ class _FeedPageState extends State<FeedPage> {
 
   Container _buttons(Post post) {
     return Container(
-      color: Colors.transparent,
+      decoration: BoxDecoration(
+          border: Border(
+              top: BorderSide(
+                  color: Color.fromARGB(255, 209, 209, 209), width: 0.5))),
       child: Row(
         children: [
           IconButton(
@@ -315,7 +310,7 @@ class _FeedPageState extends State<FeedPage> {
   }
 
   Container _tag(Group group) {
-    Color color = colorConvert('90' + group.color);
+    Color color = utils.colorConvert('90' + group.color);
 
     return Container(
       height: 30,
@@ -500,7 +495,7 @@ class _FeedPageState extends State<FeedPage> {
         child: Column(
           children: <Widget>[
             postsDisplayed.isEmpty
-                ? (CircularProgressIndicator())
+                ? (Center(child: CircularProgressIndicator()))
                 : Expanded(
                     child: (RefreshIndicator(
                       child: _postsListView(postsDisplayed),
