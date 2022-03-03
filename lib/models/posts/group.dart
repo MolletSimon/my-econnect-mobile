@@ -35,7 +35,7 @@ class Group {
     return l;
   }
 
-  // static User onePost(Map<String, dynamic> body) {
+  // static Group oneGroup(Map<String, dynamic> body) {
   //   User user = new User(
   //       id: body["_id"],
   //       firstname: body["firstname"].toString(),

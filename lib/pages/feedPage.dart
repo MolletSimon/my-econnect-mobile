@@ -414,7 +414,7 @@ class _FeedPageState extends State<FeedPage> {
         padding: const EdgeInsets.all(12.0),
         child: Text(
           post.content ?? "",
-          style: TextStyle(color: Color.fromARGB(255, 110, 110, 110)),
+          style: TextStyle(color: Color.fromARGB(255, 90, 90, 90)),
         ),
       ),
     );
@@ -428,8 +428,11 @@ class _FeedPageState extends State<FeedPage> {
       child: Padding(
         padding: const EdgeInsets.all(14.0),
         child: Text(
-          "SONDAGE",
-          style: TextStyle(color: Colors.black),
+          "SONDAGE - La fonctionnalité n'est pas encore disponible sur cette version de l'application. Merci d'utiliser le site my-econnect.fr pour exploiter cette fonctionnalité.",
+          style: TextStyle(
+            color: Colors.black,
+            fontStyle: FontStyle.italic,
+          ),
         ),
       ),
     );

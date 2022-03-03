@@ -3,8 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:my_econnect/models/posts/group.dart';
+import 'package:my_econnect/models/posts/post.dart';
 import 'package:my_econnect/models/posts/user.dart' as UserPost;
+import 'package:my_econnect/models/route.dart';
 import 'package:my_econnect/models/user.dart';
+import 'package:my_econnect/services/postService.dart';
 import 'package:my_econnect/services/userService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -230,13 +233,37 @@ class _PostPageState extends State<PostPage> {
           style: ElevatedButton.styleFrom(
             shape: CircleBorder(),
             padding: EdgeInsets.all(20),
-            primary: Color(0xFF23439B), // <-- Button color
+            primary: currentUser.groups[0].id == ''
+                ? Color.fromARGB(70, 255, 255, 255)
+                : Color(0xFF23439B), // <-- Button color
             onPrimary: Colors.white, // <-- Splash color
           ),
-          onPressed: () {
-            print(content);
-          },
+          onPressed: currentUser.groups[0].id == ''
+              ? null
+              : () {
+                  _publish(content);
+                },
         ));
+  }
+
+  _publish(String content) async {
+    if (currentUser.id == "id") {
+      await _getCurrentUser();
+    }
+    UserPost.User userPost = new UserPost.User(
+        firstname: currentUser.firstname,
+        lastname: currentUser.lastname,
+        phone: currentUser.phone);
+    Post post = new Post(
+        content: content,
+        date: DateTime.now(),
+        userLiked: false,
+        group: groupsSelected,
+        isPoll: false,
+        liked: [],
+        user: userPost);
+    PostService().publish(post).then((value) =>
+        {Navigator.of(context).pushReplacementNamed(RoutePaths.Home)});
   }
 
   Container _groupsSelected() {

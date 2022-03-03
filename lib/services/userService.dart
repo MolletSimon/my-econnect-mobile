@@ -7,6 +7,7 @@ import 'package:http/http.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../models/posts/group.dart';
 import '../models/user.dart';
 import 'apiService.dart';
 import 'package:my_econnect/models/posts/user.dart' as UserPost;
@@ -45,6 +46,17 @@ class UserService {
       await FirebaseMessaging.instance
           .subscribeToTopic('60ce72bca9392e00158655b8');
     }
+  }
+
+  User initEmptyUser() {
+    return new User(
+        id: "id",
+        firstname: "Utilisateur",
+        lastname: "",
+        groups: [new Group(color: '', id: '', name: 'groupe')],
+        isSuperadmin: false,
+        phone: "",
+        mail: "");
   }
 
   Future<Response?> getGroups(User user) async {
