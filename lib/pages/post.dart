@@ -1,15 +1,15 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:my_econnect/models/api.dart';
 import 'package:my_econnect/models/posts/group.dart';
 import 'package:my_econnect/models/posts/user.dart' as UserPost;
 import 'package:my_econnect/models/user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PostPage extends StatefulWidget {
-  PostPage({Key? key, required this.currentUser}) : super(key: key);
-
-  User currentUser;
+  PostPage({Key? key}) : super(key: key);
 
   @override
   _PostPageState createState() => _PostPageState();
@@ -17,7 +17,7 @@ class PostPage extends StatefulWidget {
 
 class _PostPageState extends State<PostPage> {
   List<Group> groupsSelected = [];
-  late User currentUser;
+  User currentUser = new User(id: "id", firstname: "Utilisateur", lastname: "", groups: [new Group(color: '', id: '', name: 'groupe')], isSuperadmin: false, phone: "", mail: "");
   String dropdownValue = '';
   String content = '';
 
@@ -25,10 +25,32 @@ class _PostPageState extends State<PostPage> {
   void initState() {
     super.initState();
     setState(() {
-      currentUser = widget.currentUser;
+      _getCurrentUser();
       dropdownValue = currentUser.groups[0].name;
     });
-    _getPicture();
+  }
+
+    Future<void> _getCurrentUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString("token") ?? "null";
+    Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+    currentUser = User.oneUser(decodedToken);
+
+    if (currentUser.isSuperadmin) {
+      Api().getGroups(currentUser).then((value) => {
+            if (value!.statusCode == 200)
+              {
+                if (mounted)
+                  {
+                    setState(() {
+                      currentUser.groups =
+                          Group.groupsList(jsonDecode(value.body));
+                      dropdownValue = currentUser.groups[0].name;
+                    })
+                  }
+              }
+          });
+    }
   }
 
   void _getPicture() {
@@ -265,21 +287,12 @@ class _PostPageState extends State<PostPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          iconTheme: IconThemeData(color: Color(0xFF23439B)),
-          title: Image.asset(
-            'assets/images/logo.png',
-            height: 50,
-          ),
-          backgroundColor: Colors.white,
-          centerTitle: false,
-        ),
         body: Center(
           child: Container(
             margin: EdgeInsets.all(20),
             child: Column(
               children: [
-                _user(),
+                
                 TextField(
                   onChanged: (value) {
                     setState(() {

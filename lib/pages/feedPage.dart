@@ -44,11 +44,13 @@ class _FeedPageState extends State<FeedPage> {
       Api().getGroups(currentUser).then((value) => {
             if (value!.statusCode == 200)
               {
-                if (mounted) {
-                  setState(() {
-                    currentUser.groups = Group.groupsList(jsonDecode(value.body));
-                  })
-                }
+                if (mounted)
+                  {
+                    setState(() {
+                      currentUser.groups =
+                          Group.groupsList(jsonDecode(value.body));
+                    })
+                  }
               }
           });
     }
@@ -62,7 +64,7 @@ class _FeedPageState extends State<FeedPage> {
         if (post.liked.isNotEmpty) {
           post.liked.forEach((like) {
             if (like.id == this.currentUser.id) {
-              if(mounted) {
+              if (mounted) {
                 setState(() {
                   post.userLiked = true;
                 });
@@ -79,12 +81,13 @@ class _FeedPageState extends State<FeedPage> {
   void _getPictures() async {
     posts.forEach((post) {
       Api().getPictures(post.user).then((value) => {
-        if (mounted) {
-            setState(() {
-              post.user.picture = jsonDecode(value!.body)[0]['img'];
-            })
-        }
-        });
+            if (mounted)
+              {
+                setState(() {
+                  post.user.picture = jsonDecode(value!.body)[0]['img'];
+                })
+              }
+          });
     });
   }
 
@@ -96,7 +99,7 @@ class _FeedPageState extends State<FeedPage> {
           postsDisplayed = posts;
         });
       }
-      _getPictures();
+      // _getPictures();
       checkIfUserLiked();
     });
   }
@@ -230,14 +233,32 @@ class _FeedPageState extends State<FeedPage> {
 
   Container _card(Post post, index) {
     return Container(
-      child: Column(
-        children: [_tile(post, index)],
+      decoration: BoxDecoration(
+          color: Colors.white, 
+          borderRadius: new BorderRadius.circular(30),
+          boxShadow: [
+            BoxShadow(
+              color: Color.fromARGB(255, 211, 211, 211).withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 10,
+              offset: Offset(0, 3), // changes position of shadow
+            ),
+          ],
+        ),
+      margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(1, 4, 1, 1),
+        child: Column(
+          children: [_tile(post, index)],
+        ),
       ),
     );
   }
 
   Container _buttons(Post post) {
     return Container(
+      color: Colors.transparent,
+
       child: Row(
         children: [
           IconButton(
@@ -297,23 +318,21 @@ class _FeedPageState extends State<FeedPage> {
   }
 
   Container _tag(Group group) {
-    Color color = colorConvert('64' + group.color);
+    Color color = colorConvert('90' + group.color);
 
     return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        color: color,
-      ),
-      margin: EdgeInsets.only(right: 8, top: 10),
+      height: 30,
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.only(),
             child: Text(
-              '@' + group.name,
+              "@" + group.name.split(' ')[0],
               style: TextStyle(
                 fontStyle: FontStyle.italic,
-                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                color: color,
+                fontSize: 12,
               ),
             ),
           )
@@ -334,7 +353,7 @@ class _FeedPageState extends State<FeedPage> {
                 flex: 2,
                 child: CircleAvatar(
                   backgroundColor: Colors.grey[100],
-                  radius: 25,
+                  radius: 20,
                   backgroundImage: post.user.picture!.isEmpty
                       ? Image.asset('assets/images/PHUser.png').image
                       : MemoryImage(base64Decode(post.user.picture!)),
@@ -342,14 +361,33 @@ class _FeedPageState extends State<FeedPage> {
               ),
               Expanded(
                 flex: 6,
-                child: Container(
-                  margin: EdgeInsets.only(left: 10),
-                  child: Text(
-                    post.user.firstname + ' ' + post.user.lastname,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontStyle: FontStyle.italic),
-                  ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(top: 20),
+                      child: Text(
+                        post.user.firstname + ' ' + post.user.lastname,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,),
+                      ),
+                    ),
+                    post.group.isEmpty
+                        ? Text('Pas de groupe')
+                        : post.group.length == 6
+                            ? Row(
+                                children: [
+                                  _tag(Group(
+                                      id: 'all',
+                                      name: 'Tous les groupes',
+                                      color: '#C5C6D0'))
+                                ],
+                              )
+                            : Wrap(
+                                children:
+                                    post.group.map((e) => _tag(e)).toList(),
+                              )
+                  ],
                 ),
               ),
               Expanded(
@@ -364,20 +402,6 @@ class _FeedPageState extends State<FeedPage> {
               )
             ],
           ),
-          post.group.isEmpty
-              ? Text('Pas de groupe')
-              : post.group.length == 6
-                  ? Row(
-                      children: [
-                        _tag(Group(
-                            id: 'all',
-                            name: 'Tous les groupes',
-                            color: '#C5C6D0'))
-                      ],
-                    )
-                  : Wrap(
-                      children: post.group.map((e) => _tag(e)).toList(),
-                    )
         ],
       ),
     );
@@ -386,13 +410,13 @@ class _FeedPageState extends State<FeedPage> {
   Container _content(Post post) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      margin: EdgeInsets.only(top: 15),
-      color: Colors.grey[100],
+      margin: EdgeInsets.only(top: 2),
+      color: Colors.white,
       child: Padding(
-        padding: const EdgeInsets.all(14.0),
+        padding: const EdgeInsets.all(12.0),
         child: Text(
           post.content ?? "",
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Color.fromARGB(255, 110, 110, 110)),
         ),
       ),
     );
@@ -437,7 +461,6 @@ class _FeedPageState extends State<FeedPage> {
         return Column(
           children: [
             _card(data[index], index),
-            const Divider(),
           ],
         );
       },
@@ -455,7 +478,6 @@ class _FeedPageState extends State<FeedPage> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => PostPage(
-                            currentUser: currentUser,
                           )));
             },
             readOnly: true,
@@ -474,30 +496,21 @@ class _FeedPageState extends State<FeedPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: <Widget>[
-          Row(
-            children: [
-              Expanded(
-                child: _inputPost(),
-                flex: 8,
-              ),
-              Expanded(
-                child: _filters(),
-                flex: 1,
-              ),
-            ],
-          ),
-          postsDisplayed.isEmpty
-              ? (CircularProgressIndicator())
-              : Expanded(
-                  child: (RefreshIndicator(
-                    child: _postsListView(postsDisplayed),
-                    onRefresh: _getCurrentUser,
-                  )),
-                )
-        ],
+    return Scaffold(
+      body: Container(
+        margin: EdgeInsets.only(top: 0),
+        child: Column(
+          children: <Widget>[
+            postsDisplayed.isEmpty
+                ? (CircularProgressIndicator())
+                : Expanded(
+                    child: (RefreshIndicator(
+                      child: _postsListView(postsDisplayed),
+                      onRefresh: _getCurrentUser,
+                    )),
+                  )
+          ],
+        ),
       ),
     );
   }

@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:my_econnect/models/route.dart' as RouterApp;
 import 'package:flutter/material.dart';
 import 'package:my_econnect/pages/homePage.dart';
@@ -6,6 +8,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'models/user.dart';
 
 String? token;
 
@@ -31,11 +34,6 @@ void main() async {
       provisional: false,
       sound: true,
     );
-
-    FirebaseMessaging.onMessage.listen((event) {
-      print("Got a message !");
-      print(event.data);
-    });
     final prefs = await SharedPreferences.getInstance();
     token = prefs.getString("token");
     runApp(MyApp(prefs));
@@ -62,12 +60,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // localizationsDelegates: [
-      //   GlobalMaterialLocalizations.delegate,
-      //   GlobalWidgetsLocalizations.delegate,
-      // ],
-      // supportedLocales: [const Locale('fr', '')],
-      // locale: const Locale('fr'),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           primarySwatch: MaterialColor(0xFF23439B, color),

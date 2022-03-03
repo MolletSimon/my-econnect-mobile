@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_econnect/models/api.dart';
 import 'package:my_econnect/models/route.dart';
@@ -125,7 +123,7 @@ class _LoginPageState extends State<LoginPage> {
                 content: Text('Connecté !'),
                 backgroundColor: Colors.green[800],
               )),
-              Navigator.of(context).pushNamed(RoutePaths.Home)
+              Navigator.of(context).pushReplacementNamed(RoutePaths.Home)
             }
         });
   }
@@ -135,17 +133,19 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: loading
           ? (_loading())
-          : Container(
-              margin: EdgeInsets.only(left: 30, right: 30, top: 150),
-              child: Column(
-                children: [
-                  _title(),
-                  _email(),
-                  _password(),
-                  _loginButton(),
-                ],
+          : SingleChildScrollView(
+            child: Container(
+                margin: EdgeInsets.only(left: 30, right: 30, top: 150),
+                child: Column(
+                  children: [
+                    _title(),
+                    _email(),
+                    _password(),
+                    _loginButton(),
+                  ],
+                ),
               ),
-            ),
+          ),
     );
   }
 }
