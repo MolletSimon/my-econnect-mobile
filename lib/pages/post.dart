@@ -134,7 +134,7 @@ class _PostPageState extends State<PostPage> {
                             'SUPER ADMINISTRATEUR',
                             style: TextStyle(
                               fontStyle: FontStyle.italic,
-                              color: Color(0xFF23439B),
+                              color: Theme.of(context).primaryColor,
                             ),
                           )
                         : Text('Membre'),
@@ -164,7 +164,7 @@ class _PostPageState extends State<PostPage> {
                     offset: Offset(0, 3), // changes position of shadow
                   ),
                 ],
-                color: Colors.grey[100]),
+                color: Theme.of(context).focusColor),
             margin: EdgeInsets.only(top: 15),
             child: DropdownButton(
               value: dropdownValue,
@@ -223,7 +223,7 @@ class _PostPageState extends State<PostPage> {
             padding: EdgeInsets.all(20),
             primary: currentUser.groups[0].id == ''
                 ? Color.fromARGB(70, 255, 255, 255)
-                : Color(0xFF23439B), // <-- Button color
+                : Theme.of(context).primaryColor, // <-- Button color
             onPrimary: Colors.white, // <-- Splash color
           ),
           onPressed: currentUser.groups[0].id == ''

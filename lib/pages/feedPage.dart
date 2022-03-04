@@ -11,7 +11,6 @@ import 'package:my_econnect/services/postService.dart';
 import 'package:my_econnect/services/userService.dart';
 import 'package:my_econnect/utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:skeletons/skeletons.dart';
 
 class FeedPage extends StatefulWidget {
   FeedPage({Key? key}) : super(key: key);
@@ -224,7 +223,7 @@ class _FeedPageState extends State<FeedPage> {
   Container _card(Post post, index) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: new BorderRadius.circular(30),
         boxShadow: [
           BoxShadow(
@@ -260,7 +259,7 @@ class _FeedPageState extends State<FeedPage> {
             icon: post.userLiked
                 ? Icon(Icons.thumb_up)
                 : Icon(Icons.thumb_up_outlined),
-            color: Color(0xFF23439B),
+            color: Theme.of(context).primaryColor,
           ),
           if (post.liked.isNotEmpty)
             Expanded(
@@ -280,11 +279,11 @@ class _FeedPageState extends State<FeedPage> {
         icon: filter
             ? Icon(
                 Icons.filter_alt,
-                color: Color(0xFF23439B),
+                color: Theme.of(context).primaryColor,
               )
             : Icon(
                 Icons.filter_alt_outlined,
-                color: Color(0xFF23439B),
+                color: Theme.of(context).primaryColor,
               ),
         onPressed: _displayFilters,
       ),
@@ -404,13 +403,11 @@ class _FeedPageState extends State<FeedPage> {
     return Container(
       width: MediaQuery.of(context).size.width,
       margin: EdgeInsets.only(top: 2),
-      color: Colors.white,
+      color: Theme.of(context).cardColor,
       child: Padding(
         padding: const EdgeInsets.all(12.0),
-        child: Text(
-          post.content ?? "",
-          style: TextStyle(color: Color.fromARGB(255, 90, 90, 90)),
-        ),
+        child: Text(post.content ?? "",
+            style: Theme.of(context).primaryTextTheme.caption),
       ),
     );
   }

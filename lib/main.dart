@@ -62,14 +62,33 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+          brightness: Brightness.light,
           primarySwatch: MaterialColor(0xFF23439B, color),
+          backgroundColor: Color.fromARGB(248, 248, 249, 250),
+          focusColor: Color.fromARGB(255, 245, 245, 245),
           primaryColor: Color(0xFF23439B),
           fontFamily: 'Poppins',
           primaryTextTheme: const TextTheme(
+            caption: TextStyle(
+              color: Color.fromARGB(255, 90, 90, 90),
+              fontSize: 14,
+            ),
             headline6: TextStyle(
               color: Color(0xFF23439B),
               fontWeight: FontWeight.bold,
               fontFamily: 'Poppins',
+            ),
+          )),
+      darkTheme: ThemeData(
+          brightness: Brightness.dark,
+          focusColor: Color.fromARGB(255, 131, 131, 131),
+          primaryColor: Color.fromARGB(255, 113, 151, 255),
+          backgroundColor: Color.fromARGB(255, 102, 102, 102),
+          cardColor: Color.fromARGB(255, 87, 87, 87),
+          primaryTextTheme: const TextTheme(
+            caption: TextStyle(
+              color: Color.fromARGB(255, 236, 236, 236),
+              fontSize: 14,
             ),
           )),
       home: HomePage(),

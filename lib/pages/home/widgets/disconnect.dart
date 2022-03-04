@@ -24,7 +24,8 @@ class Disconnect extends StatelessWidget {
           shape: MaterialStateProperty.all<CircleBorder>(CircleBorder()),
           side: MaterialStateProperty.all(
               BorderSide(width: 0, color: Colors.white)),
-          backgroundColor: MaterialStateProperty.all(Color(0xFF23439B)),
+          backgroundColor:
+              MaterialStateProperty.all(Theme.of(context).primaryColor),
         ),
         child: new Icon(
           Icons.logout,

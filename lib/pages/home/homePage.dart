@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> {
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
         margin: EdgeInsets.only(bottom: 10, left: 3, right: 3),
-        backgroundColor: Color(0xFF23439B),
+        backgroundColor: Theme.of(context).primaryColor,
       ));
     });
     return GestureDetector(
