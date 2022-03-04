@@ -11,7 +11,6 @@ import 'package:my_econnect/services/postService.dart';
 import 'package:my_econnect/services/userService.dart';
 import 'package:my_econnect/utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:skeletons/skeletons.dart';
 
 class FeedPage extends StatefulWidget {
   FeedPage({Key? key}) : super(key: key);
@@ -419,7 +418,6 @@ class _FeedPageState extends State<FeedPage> {
     return Container(
       width: MediaQuery.of(context).size.width,
       margin: EdgeInsets.only(top: 15),
-      color: Colors.grey[100],
       child: Padding(
         padding: const EdgeInsets.all(14.0),
         child: Text(

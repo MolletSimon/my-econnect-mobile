@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     FirebaseMessaging.onMessage.listen((event) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(event.notification!.body.toString()),
+        content: Text(event.data["body"]),
         behavior: SnackBarBehavior.floating,
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),

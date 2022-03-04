@@ -32,6 +32,8 @@ class UserService {
   }
 
   Future<void> subscribeToTopic(User currentUser) async {
+    print('Subscribe to topics !');
+    print(await FirebaseMessaging.instance.getToken());
     if (currentUser.isSuperadmin) {
       await FirebaseMessaging.instance
           .subscribeToTopic('60ce71b2a9392e00158655b3');
