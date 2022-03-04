@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:729590756186:android:0be725db2c945338ac3963",
         "android_client_info": {
-          "package_name": "com.example.my_econnect"
+          "package_name": "fr.connect.my_connect"
         }
       },
       "oauth_client": [
