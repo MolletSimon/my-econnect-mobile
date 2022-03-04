@@ -1,5 +1,15 @@
 # my-econnect-mobile
 
+## 0.1.1
+
+### FIX
+
+- Fix layout
+- Fix scrolling
+- Fix notifications repeated
+- Fix stability
+- Fix post validation
+
 ## 0.1.0
 
 ### FEATURES
