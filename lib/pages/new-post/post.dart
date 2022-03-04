@@ -11,7 +11,7 @@ import 'package:my_econnect/services/postService.dart';
 import 'package:my_econnect/services/userService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../utils/utils.dart';
+import '../../utils/utils.dart';
 
 class PostPage extends StatefulWidget {
   PostPage({Key? key}) : super(key: key);

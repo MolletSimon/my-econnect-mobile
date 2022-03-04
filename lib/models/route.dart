@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_econnect/pages/home/homePage.dart';
-import 'package:my_econnect/pages/loginPage.dart';
+import 'package:my_econnect/pages/user/loginPage.dart';
 
 class RoutePaths {
   static const Login = 'loginPage';

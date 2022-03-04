@@ -2,13 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:my_econnect/services/apiService.dart';
 import 'package:my_econnect/models/posts/group.dart';
 import 'package:my_econnect/models/user.dart';
 import 'package:my_econnect/services/userService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../utils/utils.dart';
+import '../../utils/utils.dart';
 
 class GroupsPage extends StatefulWidget {
   GroupsPage({Key? key}) : super(key: key);

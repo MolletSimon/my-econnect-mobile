@@ -1,9 +1,9 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:my_econnect/pages/agenda/agendaPage.dart';
-import 'package:my_econnect/pages/feedPage.dart';
-import 'package:my_econnect/pages/groupsPage.dart';
-import 'package:my_econnect/pages/post.dart';
+import 'package:my_econnect/pages/feed/feedPage.dart';
+import 'package:my_econnect/pages/groups/groupsPage.dart';
+import 'package:my_econnect/pages/new-post/post.dart';
 import './widgets/index.dart';
 
 class HomePage extends StatefulWidget {
