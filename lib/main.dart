@@ -79,18 +79,18 @@ class MyApp extends StatelessWidget {
               fontFamily: 'Poppins',
             ),
           )),
-      darkTheme: ThemeData(
-          brightness: Brightness.dark,
-          focusColor: Color.fromARGB(255, 131, 131, 131),
-          primaryColor: Color.fromARGB(255, 113, 151, 255),
-          backgroundColor: Color.fromARGB(255, 102, 102, 102),
-          cardColor: Color.fromARGB(255, 87, 87, 87),
-          primaryTextTheme: const TextTheme(
-            caption: TextStyle(
-              color: Color.fromARGB(255, 236, 236, 236),
-              fontSize: 14,
-            ),
-          )),
+      // darkTheme: ThemeData(
+      //     brightness: Brightness.dark,
+      //     focusColor: Color.fromARGB(255, 131, 131, 131),
+      //     primaryColor: Color.fromARGB(255, 113, 151, 255),
+      //     backgroundColor: Color.fromARGB(255, 100, 100, 100),
+      //     cardColor: Color.fromARGB(255, 87, 87, 87),
+      //     primaryTextTheme: const TextTheme(
+      //       caption: TextStyle(
+      //         color: Color.fromARGB(255, 236, 236, 236),
+      //         fontSize: 14,
+      //       ),
+      //     )),
       home: HomePage(),
       initialRoute: token == null || token!.isEmpty
           ? RouterApp.RoutePaths.Login
