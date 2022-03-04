@@ -90,7 +90,7 @@ class _AgendaPageState extends State<AgendaPage> {
             appointmentDisplayMode: MonthAppointmentDisplayMode.appointment),
         headerStyle: CalendarHeaderStyle(
             textAlign: TextAlign.center,
-            backgroundColor: Color(0xFF23439B),
+            backgroundColor: Theme.of(context).primaryColor,
             textStyle: TextStyle(
                 fontSize: 25,
                 fontStyle: FontStyle.normal,

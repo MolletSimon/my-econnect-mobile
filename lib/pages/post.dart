@@ -29,6 +29,7 @@ class _PostPageState extends State<PostPage> {
   User currentUser = UserService().initEmptyUser();
   String dropdownValue = '';
   String content = '';
+  bool postValid = false;
 
   @override
   void initState() {
@@ -134,7 +135,7 @@ class _PostPageState extends State<PostPage> {
                             'SUPER ADMINISTRATEUR',
                             style: TextStyle(
                               fontStyle: FontStyle.italic,
-                              color: Color(0xFF23439B),
+                              color: Theme.of(context).primaryColor,
                             ),
                           )
                         : Text('Membre'),
@@ -164,7 +165,7 @@ class _PostPageState extends State<PostPage> {
                     offset: Offset(0, 3), // changes position of shadow
                   ),
                 ],
-                color: Colors.grey[100]),
+                color: Theme.of(context).focusColor),
             margin: EdgeInsets.only(top: 15),
             child: DropdownButton(
               value: dropdownValue,
@@ -221,12 +222,12 @@ class _PostPageState extends State<PostPage> {
           style: ElevatedButton.styleFrom(
             shape: CircleBorder(),
             padding: EdgeInsets.all(20),
-            primary: currentUser.groups[0].id == ''
+            primary: currentUser.groups[0].id == '' || !postValid
                 ? Color.fromARGB(70, 255, 255, 255)
-                : Color(0xFF23439B), // <-- Button color
+                : Theme.of(context).primaryColor, // <-- Button color
             onPrimary: Colors.white, // <-- Splash color
           ),
-          onPressed: currentUser.groups[0].id == ''
+          onPressed: currentUser.groups[0].id == '' || !postValid
               ? null
               : () {
                   _publish(content);
@@ -238,6 +239,10 @@ class _PostPageState extends State<PostPage> {
     if (currentUser.id == "id") {
       await _getCurrentUser();
     }
+    if (groupsSelected.length == 0) {
+      groupsSelected.add(currentUser.groups[0]);
+    }
+
     UserPost.User userPost = new UserPost.User(
         firstname: currentUser.firstname,
         lastname: currentUser.lastname,
@@ -321,6 +326,7 @@ class _PostPageState extends State<PostPage> {
                 onChanged: (value) {
                   setState(() {
                     content = value;
+                    content != "" ? postValid = true : postValid = false;
                   });
                 },
                 // keyboardType: TextInputType.multiline,

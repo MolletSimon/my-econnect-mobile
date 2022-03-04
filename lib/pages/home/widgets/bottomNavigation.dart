@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:io' show Platform;
 
 class BottomNavigation extends StatefulWidget {
   BottomNavigation(
@@ -20,7 +21,9 @@ class _BottomNavigationState extends State<BottomNavigation> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.only(bottom: 10, right: 10, left: 10),
+        margin: Platform.isAndroid
+            ? EdgeInsets.only(bottom: 10, right: 10, left: 10)
+            : null,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(20)),
           boxShadow: [
@@ -30,6 +33,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
         child: ClipRRect(
           borderRadius: BorderRadius.all(Radius.circular(20.0)),
           child: BottomNavigationBar(
+            selectedItemColor: Theme.of(context).primaryColor,
             selectedFontSize: 10,
             type: BottomNavigationBarType.fixed,
             currentIndex: widget.currentIndex,

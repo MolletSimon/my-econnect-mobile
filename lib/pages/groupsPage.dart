@@ -144,7 +144,7 @@ class _GroupsPageState extends State<GroupsPage> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF23439B),
+                    color: Theme.of(context).primaryColor,
                     fontSize: 17,
                   ),
                 ),

@@ -13,6 +13,8 @@ class Appbar extends StatelessWidget with PreferredSizeWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           AppBar(
+            toolbarHeight: 100,
+            backgroundColor: Theme.of(context).backgroundColor,
             elevation: 0,
             title: Container(
               margin: EdgeInsets.only(left: 20),
@@ -21,7 +23,6 @@ class Appbar extends StatelessWidget with PreferredSizeWidget {
                 height: 50,
               ),
             ),
-            backgroundColor: Color.fromARGB(248, 248, 249, 250),
             actions: [Disconnect()],
             centerTitle: false,
           ),
