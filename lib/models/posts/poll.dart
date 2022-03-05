@@ -3,7 +3,7 @@ import 'package:my_econnect/models/posts/answers.dart';
 class Poll {
   final List<Answer>? answers;
   final String? content;
-  final bool? hasVoted;
+  bool? hasVoted;
 
   Poll({
     this.answers,

@@ -40,7 +40,12 @@ class _ConnectTileState extends State<ConnectTile> {
       isThreeLine: true,
       subtitle: Column(
         children: [
-          post.isPoll ? ConnectPoll() : _content(post),
+          post.isPoll
+              ? ConnectPoll(
+                  post: post,
+                  user: currentUser,
+                )
+              : _content(post),
           ConnectButtons(
             post: post,
             user: currentUser,

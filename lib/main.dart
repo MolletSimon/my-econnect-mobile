@@ -67,7 +67,7 @@ class MyApp extends StatelessWidget {
           backgroundColor: Color.fromARGB(248, 248, 249, 250),
           focusColor: Color.fromARGB(255, 245, 245, 245),
           primaryColor: Color(0xFF23439B),
-          fontFamily: 'Poppins',
+          fontFamily: 'Fredoka',
           primaryTextTheme: const TextTheme(
             caption: TextStyle(
               color: Color.fromARGB(255, 90, 90, 90),
