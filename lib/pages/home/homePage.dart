@@ -1,5 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:my_econnect/pages/agenda/agendaPage.dart';
 import 'package:my_econnect/pages/feed/feedPage.dart';
 import 'package:my_econnect/pages/groups/groupsPage.dart';
@@ -14,16 +15,33 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
+  AndroidNotificationChannel channel = AndroidNotificationChannel(
+      "main_channel", "Man channel notif",
+      importance: Importance.max);
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
 
   @override
   void initState() {
     super.initState();
-
+    _setNotificationChannel();
+    var initializationSettingsAndroid =
+        AndroidInitializationSettings('app_icon');
+    var initializationSettings =
+        InitializationSettings(android: initializationSettingsAndroid);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings);
     FirebaseMessaging.instance
         .getInitialMessage()
         .then((RemoteMessage? message) => {
               if (message != null) {print(message)}
             });
+  }
+
+  void _setNotificationChannel() async {
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(channel);
   }
 
   void _onTabTapped(int index) {
@@ -45,15 +63,22 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    FirebaseMessaging.onMessage.listen((event) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(event.data["body"]),
-        behavior: SnackBarBehavior.floating,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-        margin: EdgeInsets.only(bottom: 10, left: 3, right: 3),
-        backgroundColor: Theme.of(context).primaryColor,
-      ));
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = message.notification?.android;
+
+      if (notification != null && android != null) {
+        flutterLocalNotificationsPlugin.show(
+            notification.hashCode,
+            notification.title,
+            notification.body,
+            NotificationDetails(
+              android: AndroidNotificationDetails(channel.id, channel.name,
+                  importance: Importance.max, icon: null
+                  // other properties...
+                  ),
+            ));
+      }
     });
     return GestureDetector(
         child: Scaffold(
