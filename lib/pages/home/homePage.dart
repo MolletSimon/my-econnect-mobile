@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _setNotificationChannel();
     var initializationSettingsAndroid =
-        AndroidInitializationSettings('app_icon');
+        AndroidInitializationSettings('ic_stat_name');
     var initializationSettings =
         InitializationSettings(android: initializationSettingsAndroid);
     flutterLocalNotificationsPlugin.initialize(initializationSettings);
@@ -74,7 +74,9 @@ class _HomePageState extends State<HomePage> {
             notification.body,
             NotificationDetails(
               android: AndroidNotificationDetails(channel.id, channel.name,
-                  importance: Importance.max, icon: null
+                  color: Theme.of(context).primaryColor,
+                  priority: Priority.high,
+                  importance: Importance.high
                   // other properties...
                   ),
             ));
