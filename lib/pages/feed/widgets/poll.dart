@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:my_econnect/models/posts/poll.dart';
 import 'package:my_econnect/models/posts/post.dart';
@@ -53,7 +55,7 @@ class _PollState extends State<ConnectPoll> {
     List<int> value = [];
 
     _checkIfUserVoted(poll, user);
-
+    print(poll.hasVoted);
     return Container(
         child: poll.hasVoted! ? Text("A voté !") : _votePanel(poll, value));
   }

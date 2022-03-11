@@ -13,7 +13,7 @@ class User {
     required this.phone,
   });
 
-  Map toJson() => {'firstname': firstname, 'lastname': lastname, 'id': id, 'img': img};
+  Map toJson() => {'firstname': firstname, 'lastname': lastname, '_id': id, 'img': img};
 
   //Method
   static List<User> userList(List<dynamic> body) {
@@ -23,7 +23,7 @@ class User {
 
     results.forEach((value) {
       User post = User(
-          id: value["id"],
+          id: value["_id"],
           img: value["img"],
           firstname: value["firstname"],
           lastname: value["lastname"],
@@ -36,7 +36,7 @@ class User {
 
   static User oneUser(Map<String, dynamic> body) {
     User user = new User(
-        id: body["id"],
+        id: body["_id"],
         img: body["img"],
         firstname: body["firstname"],
         lastname: body["lastname"],
