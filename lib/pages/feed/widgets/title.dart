@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:my_econnect/models/posts/group.dart';
 import 'package:my_econnect/models/posts/post.dart';
@@ -22,14 +24,13 @@ class _CardTitleState extends State<CardTitle> {
       height: 30,
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(),
+          Container(
             child: Text(
               "@" + group.name.split(' ')[0],
               style: TextStyle(
                 fontStyle: FontStyle.italic,
                 fontWeight: FontWeight.bold,
-                color: color,
+                color: Colors.grey,
                 fontSize: 12,
               ),
             ),
@@ -50,12 +51,18 @@ class _CardTitleState extends State<CardTitle> {
             children: [
               Expanded(
                 flex: 2,
-                child: CircleAvatar(
-                  backgroundColor: Colors.grey[100],
-                  radius: 20,
-                  backgroundImage: post.user.picture!.isEmpty
-                      ? Image.asset('assets/images/PHUser.png').image
-                      : MemoryImage(base64Decode(post.user.picture!)),
+                child: Container(
+                  height: 40,
+                  child: FittedBox(
+                    fit: BoxFit.contain,
+                    child: CircleAvatar(
+                      backgroundColor: Colors.grey[100],
+                      radius: 20,
+                      backgroundImage: post.user.img == null || post.user.img == ""
+                          ? Image.asset('assets/images/PHUser.png').image
+                          : MemoryImage(base64.decode(post.user.img!))
+                    ),
+                  ),
                 ),
               ),
               Expanded(

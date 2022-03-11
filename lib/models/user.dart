@@ -6,19 +6,18 @@ class User {
   final String lastname;
   final String mail;
   List<Group> groups;
-  final bool isSuperadmin;
+  bool? isSuperadmin;
   final String phone;
-  String? picture;
+  String? img;
 
   User(
       {required this.id,
       required this.firstname,
       required this.lastname,
-      required this.groups,
-      required this.isSuperadmin,
+      required this.groups, this.isSuperadmin,
       required this.phone,
       required this.mail,
-      this.picture});
+      this.img});
 
   Map toJson() => {
         'firstname': firstname,
@@ -28,7 +27,7 @@ class User {
         'isSuperadmin': isSuperadmin,
         'phone': phone,
         'mail': mail,
-        'pictures': picture
+        'img': img
       };
 
   //Method
@@ -45,7 +44,7 @@ class User {
           groups: Group.groupsList(value["groups"]),
           isSuperadmin: value["isSuperadmin"],
           mail: value["mail"],
-          picture: value["pictures"],
+          img: value["img"],
           phone: value["phone"].toString());
       l.add(user);
     });
@@ -61,7 +60,7 @@ class User {
         groups: Group.groupsList(body["groups"]),
         isSuperadmin: body["isSuperadmin"],
         mail: body["mail"],
-        picture: body["pictures"],
+        img: body["img"],
         phone: body["phone"].toString());
     return user;
   }

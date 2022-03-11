@@ -64,20 +64,19 @@ class _AgendaPageState extends State<AgendaPage> {
     Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
     currentUser = User.oneUser(decodedToken);
 
-    if (currentUser.isSuperadmin) {
-      UserService().getGroups(currentUser).then((value) => {
-            if (value!.statusCode == 200)
-              {
-                if (mounted)
-                  {
-                    setState(() {
-                      currentUser.groups =
-                          Group.groupsList(jsonDecode(value.body));
-                    })
-                  }
-              }
-          });
-    }
+
+    UserService().getGroups(currentUser).then((value) => {
+          if (value!.statusCode == 200)
+            {
+              if (mounted)
+                {
+                  setState(() {
+                    currentUser.groups =
+                        Group.groupsList(jsonDecode(value.body));
+                  })
+                }
+            }
+        });
   }
 
   @override
@@ -91,10 +90,11 @@ class _AgendaPageState extends State<AgendaPage> {
         headerStyle: CalendarHeaderStyle(
             textAlign: TextAlign.center,
             backgroundColor: Theme.of(context).primaryColor,
+
             textStyle: TextStyle(
                 fontSize: 25,
                 fontStyle: FontStyle.normal,
-                letterSpacing: 5,
+                letterSpacing: 2,
                 color: Color(0xFFff5eaea),
                 fontWeight: FontWeight.w500)),
         firstDayOfWeek: 1,

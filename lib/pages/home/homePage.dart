@@ -1,5 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:my_econnect/pages/agenda/agendaPage.dart';
 import 'package:my_econnect/pages/feed/feedPage.dart';
@@ -13,7 +14,7 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   int _currentIndex = 0;
   AndroidNotificationChannel channel = AndroidNotificationChannel(
       "main_channel", "Man channel notif",
@@ -22,8 +23,17 @@ class _HomePageState extends State<HomePage> {
       FlutterLocalNotificationsPlugin();
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if(state == AppLifecycleState.resumed){
+      FlutterAppBadger.removeBadge();
+      flutterLocalNotificationsPlugin.cancelAll();
+    }
+  }
+
+  @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance!.addObserver(this);
     _setNotificationChannel();
     var initializationSettingsAndroid =
         AndroidInitializationSettings('ic_stat_name');
@@ -35,6 +45,12 @@ class _HomePageState extends State<HomePage> {
         .then((RemoteMessage? message) => {
               if (message != null) {print(message)}
             });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance!.removeObserver(this);
+    super.dispose();
   }
 
   void _setNotificationChannel() async {

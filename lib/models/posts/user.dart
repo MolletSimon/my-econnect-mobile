@@ -2,18 +2,18 @@ class User {
   final String firstname;
   final String lastname;
   final String? id;
-  String? picture;
+  String? img;
   String phone;
 
   User({
     this.id,
-    this.picture,
+    this.img,
     required this.firstname,
     required this.lastname,
     required this.phone,
   });
 
-  Map toJson() => {'firstname': firstname, 'lastname': lastname, '_id': id};
+  Map toJson() => {'firstname': firstname, 'lastname': lastname, 'id': id, 'img': img};
 
   //Method
   static List<User> userList(List<dynamic> body) {
@@ -23,8 +23,8 @@ class User {
 
     results.forEach((value) {
       User post = User(
-          id: value["_id"],
-          picture: "",
+          id: value["id"],
+          img: value["img"],
           firstname: value["firstname"],
           lastname: value["lastname"],
           phone: value["phone"] == null ? "" : value["phone"]);
@@ -35,10 +35,9 @@ class User {
   }
 
   static User oneUser(Map<String, dynamic> body) {
-    // print(body.values);
     User user = new User(
         id: body["id"],
-        picture: "",
+        img: body["img"],
         firstname: body["firstname"],
         lastname: body["lastname"],
         phone: body["phone"] == null ? "" : body["phone"]);

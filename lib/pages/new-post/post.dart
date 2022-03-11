@@ -33,11 +33,11 @@ class _PostPageState extends State<PostPage> {
 
   @override
   void initState() {
-    super.initState();
     setState(() {
       _getCurrentUser();
       dropdownValue = currentUser.groups[0].name;
     });
+    super.initState();
   }
 
   Future<void> _getCurrentUser() async {
@@ -45,37 +45,22 @@ class _PostPageState extends State<PostPage> {
     String token = prefs.getString("token") ?? "null";
     Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
     currentUser = User.oneUser(decodedToken);
+    var responsePicture = await UserService().getPictures(currentUser);
+    currentUser.img = jsonDecode(responsePicture!.body)[0]["img"];
 
-    if (currentUser.isSuperadmin) {
-      UserService().getGroups(currentUser).then((value) => {
-            if (value!.statusCode == 200)
-              {
-                if (mounted)
-                  {
-                    setState(() {
-                      currentUser.groups =
-                          Group.groupsList(jsonDecode(value.body));
-                      dropdownValue = currentUser.groups[0].name;
-                    })
-                  }
-              }
-          });
-    }
-  }
-
-  void _getPicture() {
-    UserService()
-        .getPictures(UserPost.User(
-            firstname: currentUser.firstname,
-            lastname: currentUser.lastname,
-            id: currentUser.id,
-            phone: currentUser.phone,
-            picture: ""))
-        .then((value) => {
-              setState(() {
-                currentUser.picture = jsonDecode(value!.body)[0]['img'];
-              })
-            });
+    UserService().getGroups(currentUser).then((value) => {
+          if (value!.statusCode == 200)
+            {
+              if (mounted)
+                {
+                  setState(() {
+                    currentUser.groups =
+                        Group.groupsList(jsonDecode(value.body));
+                    dropdownValue = currentUser.groups[0].name;
+                  })
+                }
+            }
+        });
   }
 
   void _addGroup(Group group) {
@@ -91,30 +76,32 @@ class _PostPageState extends State<PostPage> {
   }
 
   Container _profilePicture() {
-    return Container(
-      margin: EdgeInsets.only(bottom: 20),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 5,
-              blurRadius: 7,
-              offset: Offset(0, 3), // changes position of shadow
-            ),
-          ],
-          color: Colors.grey[100]),
-      child: CircleAvatar(
-          radius: 25,
-          backgroundImage: MemoryImage(base64.decode(currentUser.picture!))),
-    );
+      return Container(
+        margin: EdgeInsets.only(bottom: 20),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 5,
+                blurRadius: 7,
+                offset: Offset(0, 3), // changes position of shadow
+              ),
+            ],
+            color: Colors.grey[100]),
+            child: CircleAvatar(
+                radius: 25,
+                backgroundImage: currentUser.img == null || currentUser.img == "" ?
+                    Image.asset('assets/images/PHUser.png').image : MemoryImage(base64.decode(currentUser.img!)),
+          ),
+      );
   }
 
   Container _user() {
     return Container(
       child: Row(
         children: [
-          // if (currentUser.picture != null) _profilePicture(),
+          _profilePicture(),
           Expanded(
             child: Container(
               margin: EdgeInsets.only(left: 15, bottom: 20),
@@ -130,7 +117,7 @@ class _PostPageState extends State<PostPage> {
                         ),
                       )),
                   Align(
-                    child: currentUser.isSuperadmin
+                    child: currentUser.isSuperadmin != null
                         ? Text(
                             'SUPER ADMINISTRATEUR',
                             style: TextStyle(
@@ -244,8 +231,10 @@ class _PostPageState extends State<PostPage> {
     }
 
     UserPost.User userPost = new UserPost.User(
+        id: currentUser.id,
         firstname: currentUser.firstname,
         lastname: currentUser.lastname,
+        img: currentUser.img ?? "",
         phone: currentUser.phone);
     Post post = new Post(
         content: content,

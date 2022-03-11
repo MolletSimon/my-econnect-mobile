@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:my_econnect/services/userService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../models/route.dart';
+import '../../../models/user.dart';
 
 class Disconnect extends StatelessWidget {
   const Disconnect({Key? key}) : super(key: key);
@@ -13,7 +15,8 @@ class Disconnect extends StatelessWidget {
     logout() async {
       SharedPreferences prefs = await _prefs;
       prefs.setString("token", "");
-      Navigator.of(context).pushNamed(RoutePaths.Login);
+      UserService().unsubscribeToTopic();
+      Navigator.of(context).pushReplacementNamed(RoutePaths.Login);
     }
 
     return Container(

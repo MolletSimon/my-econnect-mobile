@@ -41,20 +41,18 @@ class _FeedPageState extends State<FeedPage> {
     Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
     currentUser = User.oneUser(decodedToken);
 
-    if (currentUser.isSuperadmin) {
-      UserService().getGroups(currentUser).then((value) => {
-            if (value!.statusCode == 200)
-              {
-                if (mounted)
-                  {
-                    setState(() {
-                      currentUser.groups =
-                          Group.groupsList(jsonDecode(value.body));
-                    })
-                  }
-              }
-          });
-    }
+    UserService().getGroups(currentUser).then((value) => {
+          if (value!.statusCode == 200)
+            {
+              if (mounted)
+                {
+                  setState(() {
+                    currentUser.groups =
+                        Group.groupsList(jsonDecode(value.body));
+                  })
+                }
+            }
+        });
 
     _getPosts(currentUser);
   }
@@ -87,7 +85,6 @@ class _FeedPageState extends State<FeedPage> {
           postsDisplayed = posts;
         });
       }
-      // _getPictures();
       checkIfUserLiked();
     });
   }

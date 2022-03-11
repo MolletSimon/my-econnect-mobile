@@ -25,16 +25,29 @@ class UserService {
 
       Map<String, dynamic> decodedToken = JwtDecoder.decode(response.body);
       User currentUser = User.oneUser(decodedToken);
-
       await subscribeToTopic(currentUser);
     }
     return response;
   }
+  
+  Future<void> unsubscribeToTopic() async {
+    await FirebaseMessaging.instance
+        .unsubscribeFromTopic('60ce71b2a9392e00158655b3');
+    await FirebaseMessaging.instance
+        .unsubscribeFromTopic('60ce71f3a9392e00158655b4');
+    await FirebaseMessaging.instance
+        .unsubscribeFromTopic('60ce724aa9392e00158655b5');
+    await FirebaseMessaging.instance
+        .unsubscribeFromTopic('60ce727ba9392e00158655b6');
+    await FirebaseMessaging.instance
+        .unsubscribeFromTopic('60ce729aa9392e00158655b7');
+    await FirebaseMessaging.instance
+        .unsubscribeFromTopic('60ce72bca9392e00158655b8');
+  }
 
   Future<void> subscribeToTopic(User currentUser) async {
-    print('Subscribe to topics !');
     print(await FirebaseMessaging.instance.getToken());
-    if (currentUser.isSuperadmin) {
+    if (currentUser.isSuperadmin != null) {
       await FirebaseMessaging.instance
           .subscribeToTopic('60ce71b2a9392e00158655b3');
       await FirebaseMessaging.instance
@@ -47,6 +60,10 @@ class UserService {
           .subscribeToTopic('60ce729aa9392e00158655b7');
       await FirebaseMessaging.instance
           .subscribeToTopic('60ce72bca9392e00158655b8');
+    } else {
+      currentUser.groups.forEach((group) async {
+        await FirebaseMessaging.instance.subscribeToTopic(group.id);
+      });
     }
   }
 
@@ -81,7 +98,7 @@ class UserService {
     return null;
   }
 
-  Future<Response?> getPictures(UserPost.User user) async {
+  Future<Response?> getPictures(User user) async {
     SharedPreferences _prefs = await ApiService().prefs;
     String token = _prefs.getString("token") ?? "null";
 
@@ -104,8 +121,10 @@ class UserService {
     String token = prefs.getString("token") ?? "null";
     Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
     User currentUser = User.oneUser(decodedToken);
+    var responsePicture = await getPictures(currentUser);
+    currentUser.img = (jsonDecode(responsePicture!.body)["img"]).toString();
 
-    if (currentUser.isSuperadmin) {
+    if (currentUser.isSuperadmin != null) {
       UserService().getGroups(currentUser).then((value) => {
             if (value!.statusCode == 200)
               {currentUser.groups = Group.groupsList(jsonDecode(value.body))}

@@ -9,13 +9,13 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'models/user.dart';
 
 String? token;
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
-  print("background message !");
+  FlutterAppBadger.updateBadgeCount(1);
 }
 
 void main() async {
@@ -68,7 +68,7 @@ class MyApp extends StatelessWidget {
           backgroundColor: Color.fromARGB(248, 248, 249, 250),
           focusColor: Color.fromARGB(255, 245, 245, 245),
           primaryColor: Color(0xFF23439B),
-          fontFamily: 'Fredoka',
+          fontFamily: 'Poppins',
           primaryTextTheme: const TextTheme(
             caption: TextStyle(
               color: Color.fromARGB(255, 90, 90, 90),

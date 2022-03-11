@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_econnect/models/user.dart';
 
 import 'disconnect.dart';
 
