@@ -30,10 +30,11 @@ class _CardTitleState extends State<CardTitle> {
               style: TextStyle(
                 fontStyle: FontStyle.italic,
                 fontWeight: FontWeight.bold,
-                color: Colors.grey,
+                color: color,
                 fontSize: 12,
               ),
             ),
+            margin: EdgeInsets.only(right: 6),
           )
         ],
       ),
@@ -71,7 +72,7 @@ class _CardTitleState extends State<CardTitle> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin: EdgeInsets.only(top: 20),
+                      margin: EdgeInsets.only(top: 10),
                       child: Text(
                         post.user.firstname + ' ' + post.user.lastname,
                         style: TextStyle(
@@ -87,7 +88,7 @@ class _CardTitleState extends State<CardTitle> {
                                   _tag(Group(
                                       id: 'all',
                                       name: 'Tous les groupes',
-                                      color: '#C5C6D0'))
+                                      color: '#4f4f4f'))
                                 ],
                               )
                             : Wrap(

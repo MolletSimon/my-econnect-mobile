@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../models/posts/poll.dart';
 import '../models/user.dart';
 import 'apiService.dart';
 import 'package:my_econnect/models/posts/user.dart' as UserPost;
@@ -67,11 +68,16 @@ class PostService {
     return null;
   }
 
-  Future<Response?> like(Post post) async {
+  Future<Response?> update(Post post, bool liked, bool voted) async {
     SharedPreferences _prefs = await ApiService().prefs;
     String token = _prefs.getString("token") ?? "null";
 
-    var body = jsonEncode(<String, List<UserPost.User>>{'liked': post.liked});
+    var body = "";
+    if (liked) {
+      body = jsonEncode(<String, List<UserPost.User>>{'liked': post.liked});
+    } else {
+      body = jsonEncode(<String, Poll> {'poll': post.poll!});
+    }
 
     if (token != "null" || token.isEmpty) {
       var response =

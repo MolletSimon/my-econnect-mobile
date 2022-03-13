@@ -56,7 +56,7 @@ class _ConnectButtonsState extends State<ConnectButtons> {
       });
     }
 
-    PostService().like(post).then((value) => {
+    PostService().update(post, true, false).then((value) => {
           if (value!.statusCode == 201) {print('liked')}
         });
   }

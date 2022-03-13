@@ -34,12 +34,10 @@ class _AgendaPageState extends State<AgendaPage> {
   void _getAppointments() async {
     await _getCurrentUser();
     AgendaService().getAppointments(currentUser).then((value) => {
-          print(value!.body),
           setState(() => {
                 appointments = AppointmentConnect.appointmentConnectList(
-                    jsonDecode(value.body))
+                    jsonDecode(value!.body))
               }),
-          print(appointments[0])
         });
   }
 

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:io' show Platform;
 
+import 'package:my_econnect/pages/feed/screens/feedPage.dart';
+
 class BottomNavigation extends StatefulWidget {
   BottomNavigation(
       {Key? key, required this.parentAction, required this.currentIndex})
@@ -37,7 +39,6 @@ class _BottomNavigationState extends State<BottomNavigation> {
             selectedFontSize: 10,
             type: BottomNavigationBarType.fixed,
             currentIndex: widget.currentIndex,
-            // showSelectedLabels: false,
             showUnselectedLabels: false,
             onTap: (int i) {
               widget.parentAction(i);

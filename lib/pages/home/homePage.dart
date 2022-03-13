@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:my_econnect/pages/agenda/agendaPage.dart';
-import 'package:my_econnect/pages/feed/feedPage.dart';
+import 'package:my_econnect/pages/feed/screens/feedPage.dart';
 import 'package:my_econnect/pages/groups/groupsPage.dart';
 import 'package:my_econnect/pages/new-post/post.dart';
 import './widgets/index.dart';

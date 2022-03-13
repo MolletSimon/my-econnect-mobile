@@ -11,6 +11,12 @@ class Poll {
     this.hasVoted,
   });
 
+  Map toJson() => {
+    'answers': answers,
+    'content': content,
+    'hasVoted': hasVoted,
+  };
+
   //Method
   static List<Poll> PollsList(List<dynamic> body) {
     List<Poll> l = [];

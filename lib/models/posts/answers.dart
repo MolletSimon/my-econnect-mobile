@@ -2,16 +2,23 @@ import 'package:my_econnect/models/posts/user.dart';
 
 class Answer {
   final String? name;
-  final int? nbVote;
+  int nbVote;
   final int? id;
   final List<User>? usersWhoVoted;
 
   Answer({
     this.id,
     this.name,
-    this.nbVote,
+    required this.nbVote,
     this.usersWhoVoted,
   });
+
+  Map toJson() => {
+    'id': id,
+    'name': name,
+    'nbVote': nbVote,
+    'usersWhoVoted': usersWhoVoted,
+  };
 
   //Method
   static List<Answer> answersList(List<dynamic> body) {

@@ -102,7 +102,7 @@ class UserService {
     SharedPreferences _prefs = await ApiService().prefs;
     String token = _prefs.getString("token") ?? "null";
 
-    var id = user.id ?? "";
+    var id = user.id;
     if (token != "null" || token.isEmpty) {
       var response = await http.get(
           Uri.parse(ApiService().baseURL + '/user/get/picture/' + id),

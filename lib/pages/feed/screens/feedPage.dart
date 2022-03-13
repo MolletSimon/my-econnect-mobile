@@ -28,11 +28,29 @@ class _FeedPageState extends State<FeedPage> {
   late User currentUser;
   bool filter = false;
   bool writing = false;
+  // scroll controller
+  late ScrollController _scrollController;
+  bool _showBackToTopButton = false;
 
   @override
   void initState() {
+    _scrollController = ScrollController()..addListener(() {
+      setState(() {
+        if (_scrollController.offset >= 400) {
+          _showBackToTopButton = true; // show the back-to-top button
+        } else {
+          _showBackToTopButton = false; // hide the back-to-top button
+        }
+      });
+    });
     _getCurrentUser();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose(); // dispose the controller
+    super.dispose();
   }
 
   Future<void> _getCurrentUser() async {
@@ -77,6 +95,11 @@ class _FeedPageState extends State<FeedPage> {
     }
   }
 
+  void _scrollToTop() {
+    _scrollController.animateTo(0,
+        duration: const Duration(milliseconds: 500), curve: Curves.linear);
+  }
+
   Future<void> _getPosts(user) async {
     PostService().getPosts(user).then((value) {
       if (mounted) {
@@ -89,18 +112,13 @@ class _FeedPageState extends State<FeedPage> {
     });
   }
 
-  void publish(String content) {
-    if (content.isNotEmpty) {
-      print(content);
-    }
-  }
-
   ListView _postsListView(List<Post> data) {
     if (data == null) {
       return ListView();
     }
     return ListView.builder(
       itemCount: data.length,
+      controller: _scrollController,
       itemBuilder: (context, index) {
         return Column(
           children: [
