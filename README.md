@@ -1,8 +1,26 @@
 # my-econnect-mobile
 
-## 0.1.1
+## 0.3.0
+### FEATURES
+- Add vote possibility
+- Add view users who voted
 
-### FIX
+## 0.2.0
+### FEATURES
+- Add badges to icon
+- Add group gestion
+- Fix navigation problem
+- Fix hasVoted to poll
+
+## 0.1.2
+### FIXES
+- Fix notifications on Android
+- Fix pictures profile
+- Init polls
+- Minor fixes and improvement
+
+## 0.1.1
+### FIXES
 
 - Fix layout
 - Fix scrolling
