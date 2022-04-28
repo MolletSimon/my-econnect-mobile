@@ -12,13 +12,13 @@ class Poll {
   });
 
   Map toJson() => {
-    'answers': answers,
-    'content': content,
-    'hasVoted': hasVoted,
-  };
+        'answers': answers,
+        'content': content,
+        'hasVoted': hasVoted,
+      };
 
   //Method
-  static List<Poll> PollsList(List<dynamic> body) {
+  static List<Poll> pollsList(List<dynamic> body) {
     List<Poll> l = [];
 
     List<dynamic> results = body;

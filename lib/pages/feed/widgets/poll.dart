@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_econnect/models/posts/poll.dart';
 import 'package:my_econnect/models/posts/post.dart';

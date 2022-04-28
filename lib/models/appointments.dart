@@ -1,5 +1,3 @@
-import 'package:my_econnect/models/posts/group.dart';
-
 class AppointmentConnect {
   final String? description;
   final DateTime endTime;

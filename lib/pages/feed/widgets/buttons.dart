@@ -91,6 +91,5 @@ class _ConnectButtonsState extends State<ConnectButtons> {
         ],
       ),
     );
-    ;
   }
 }

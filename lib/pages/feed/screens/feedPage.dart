@@ -1,13 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:my_econnect/models/posts/group.dart';
 import 'package:my_econnect/models/posts/post.dart';
 
 import 'package:my_econnect/models/user.dart';
 import 'package:my_econnect/pages/feed/widgets/card.dart';
-import 'package:my_econnect/pages/new-post/post.dart';
 import 'package:my_econnect/services/postService.dart';
 import 'package:my_econnect/services/userService.dart';
 import 'package:my_econnect/utils/utils.dart';
@@ -28,29 +26,11 @@ class _FeedPageState extends State<FeedPage> {
   late User currentUser;
   bool filter = false;
   bool writing = false;
-  // scroll controller
-  late ScrollController _scrollController;
-  bool _showBackToTopButton = false;
 
   @override
   void initState() {
-    _scrollController = ScrollController()..addListener(() {
-      setState(() {
-        if (_scrollController.offset >= 400) {
-          _showBackToTopButton = true; // show the back-to-top button
-        } else {
-          _showBackToTopButton = false; // hide the back-to-top button
-        }
-      });
-    });
     _getCurrentUser();
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose(); // dispose the controller
-    super.dispose();
   }
 
   Future<void> _getCurrentUser() async {
@@ -95,11 +75,6 @@ class _FeedPageState extends State<FeedPage> {
     }
   }
 
-  void _scrollToTop() {
-    _scrollController.animateTo(0,
-        duration: const Duration(milliseconds: 500), curve: Curves.linear);
-  }
-
   Future<void> _getPosts(user) async {
     PostService().getPosts(user).then((value) {
       if (mounted) {
@@ -113,12 +88,12 @@ class _FeedPageState extends State<FeedPage> {
   }
 
   ListView _postsListView(List<Post> data) {
+    // ignore: unnecessary_null_comparison
     if (data == null) {
       return ListView();
     }
     return ListView.builder(
       itemCount: data.length,
-      controller: _scrollController,
       itemBuilder: (context, index) {
         return Column(
           children: [

@@ -2,6 +2,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:my_econnect/pages/account/accountPage.dart';
 import 'package:my_econnect/pages/agenda/agendaPage.dart';
 import 'package:my_econnect/pages/feed/screens/feedPage.dart';
 import 'package:my_econnect/pages/groups/groupsPage.dart';
@@ -24,7 +25,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if(state == AppLifecycleState.resumed){
+    if (state == AppLifecycleState.resumed) {
       FlutterAppBadger.removeBadge();
       flutterLocalNotificationsPlugin.cancelAll();
     }
@@ -35,11 +36,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance!.addObserver(this);
     _setNotificationChannel();
-    var initializationSettingsAndroid =
-        AndroidInitializationSettings('ic_stat_name');
-    var initializationSettings =
-        InitializationSettings(android: initializationSettingsAndroid);
-    flutterLocalNotificationsPlugin.initialize(initializationSettings);
     FirebaseMessaging.instance
         .getInitialMessage()
         .then((RemoteMessage? message) => {
@@ -71,10 +67,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     AgendaPage(),
     PostPage(),
     GroupsPage(),
-    Container(
-      child: Text(
-          "L'application est encore en cours de développement et cette fonctionnalité n'est pas encore disponible. Merci d'utiliser le site my-connect.fr pour utiliser ces fonctionnalités."),
-    )
+    AccountPage()
   ];
 
   @override

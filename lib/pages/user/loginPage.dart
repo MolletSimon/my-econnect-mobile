@@ -42,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
     return Container(
       margin: EdgeInsets.only(bottom: 20),
       child: Text(
-        "Wesh !",
+        "Hello again !",
         style: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 40,

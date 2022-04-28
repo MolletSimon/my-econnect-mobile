@@ -62,7 +62,6 @@ class _AgendaPageState extends State<AgendaPage> {
     Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
     currentUser = User.oneUser(decodedToken);
 
-
     UserService().getGroups(currentUser).then((value) => {
           if (value!.statusCode == 200)
             {
@@ -88,7 +87,6 @@ class _AgendaPageState extends State<AgendaPage> {
         headerStyle: CalendarHeaderStyle(
             textAlign: TextAlign.center,
             backgroundColor: Theme.of(context).primaryColor,
-
             textStyle: TextStyle(
                 fontSize: 25,
                 fontStyle: FontStyle.normal,
