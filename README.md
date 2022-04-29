@@ -36,26 +36,27 @@ _There is a shared calendar where you can add event and consult them, an event i
 - **Push notifications**  🔔
 _The application has push notifications when a new posts or a new event from your group are published_  
 
-## How is it made ? ⚙️
-### Backend 
-- **_API_** : NodeJS Express backend, hosted on Heroku 
-
-
-- **_Database_** : NoSQL MongoDb database, hosted on MongoDb cluster
-
-
-- **_Analytics, Hosting, Notifications_** : Firebase project, integrated with Fireflutter (Firebase Cloud Messaging for notifications, Google analytics etc...)
-
-
-- **_The App_** : The application has been developed with the Google's SDK Flutter, powered by Dart langage and Skia render Engine, ensuring the stability, security, maintainability and ergonomics of the application on all platforms.
-
+## How is it made ? ⚙️ 
 <div>
-<image src="https://user-images.githubusercontent.com/43732526/165847389-6dd69078-ece2-4361-8dcf-35b65b45e08d.png" width="300px" height="80px"/>
-<image src="https://user-images.githubusercontent.com/43732526/165850159-763b522e-f69b-4018-819b-ac2cc4fe0ba1.png" width="100px" height="80px"/>
-<image src="https://user-images.githubusercontent.com/43732526/165848572-2049fb91-b732-4689-9e15-a6c26771afc7.png" width="300px" height="80px"/>
-<image src="https://user-images.githubusercontent.com/43732526/165849121-f818307a-2eec-483c-8e4b-a42cfb20903a.png" width="300px" height="80px"/>
+<image src="https://user-images.githubusercontent.com/43732526/165847389-6dd69078-ece2-4361-8dcf-35b65b45e08d.png" width="150px" height="40px"/>
+<image src="https://user-images.githubusercontent.com/43732526/165913954-a5dfefb6-3e1c-47f0-ba7c-f8b5a7ae38b5.png" width="50px" height="50px"/>
+<image src="https://user-images.githubusercontent.com/43732526/165848572-2049fb91-b732-4689-9e15-a6c26771afc7.png" width="150px" height="40px"/>
+<image src="https://user-images.githubusercontent.com/43732526/165849121-f818307a-2eec-483c-8e4b-a42cfb20903a.png" width="150px" height="40px"/>
+<image src="https://vectorlogoseek.com/wp-content/uploads/2020/06/figma-vector-logo.png" width="100px" height="40px" />
 </div>
 
+- **_API_** : [NodeJS Express](https://expressjs.com/fr/) backend, hosted on [Heroku](https://www.heroku.com/) 
+
+
+- **_Database_** : NoSQL [MongoDb](https://www.mongodb.com/fr-fr) database, hosted on MongoDb cluster
+
+
+- **_Analytics, Hosting, Notifications_** : [Firebase](https://firebase.google.com/) project, integrated with Fireflutter (Firebase Cloud Messaging for notifications, Google analytics etc...)
+
+
+- **_The App_** : The application has been developed with the Google's SDK [Flutter](https://flutter.dev/), powered by Dart langage and Skia render Engine, ensuring the stability, security, maintainability and ergonomics of the application on all platforms.
+
+- **_Design_** : Design was made with [Figma](https://www.figma.com/), and my very weak abilities in design 
 
 
 
